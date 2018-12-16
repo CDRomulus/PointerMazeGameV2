@@ -1,4 +1,5 @@
 CMakeLists.txt.user
+
 CMakeCache.txt
 CMakeFiles
 CMakeScripts
@@ -8,4 +9,8 @@ cmake_install.cmake
 install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
-build.sh
+
+*.workspace
+*.project
+pointerMazeGameV2
+Makefile

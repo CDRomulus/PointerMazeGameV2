@@ -3,8 +3,6 @@
   <VirtualDirectory Name="src">
     <VirtualDirectory Name="src">
       <File Name="src/Main.cpp"/>
-      <File Name="src/Node.h"/>
-      <File Name="src/Edge.h"/>
       <File Name="src/Graph.h"/>
     </VirtualDirectory>
   </VirtualDirectory>
