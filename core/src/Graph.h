@@ -43,14 +43,10 @@ class Graph
 	{
 		printf("Graph Destructor Called\n");
 		for(unsigned i =0; i<m_map.size();i++)
-		{
-			
+		{			
 			delete &(*m_map[i]);	
 			std::cout<<m_map[i]<<std::endl;
-		}
-		
-		
-		
+		}	
 	}
 	private:
 	void GraphGeneration()
@@ -64,12 +60,7 @@ class Graph
 		Node* m = new Node(y);
 		
 		this->m_map.push_back(n);
-		this->m_map.push_back(m);
-		
-		
-	}
-	
+		this->m_map.push_back(m);	
+	}		
 };
-
-
 #endif
