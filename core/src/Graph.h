@@ -25,7 +25,7 @@ class System
 	}	
 	void ClearScreen()
     {
-    std::cout << std::string( 100, '\n' );
+    system("clear");
     }
 
 };
@@ -34,7 +34,7 @@ class Node
 	private:
 	std::string m_name;
 	std::vector<int> m_bearing;//0=north,1=east,2=south,3=west
-	std::vector<Node*> m_nodes;	//bearing poiter to nodes
+	std::vector<Node*> m_nodes;	//bearing pointer to nodes
 	
 	void AssingNodes(int p, std::string x,std::vector<Node*> &m_map)
 	{
@@ -57,6 +57,21 @@ class Node
 	~Node()
 	{	
 			
+	}
+	std::vector<int>& GetBearings()
+	{
+		return m_bearing;
+	}
+	Node* GetExit(int x)
+	{
+		for(unsigned int i =0; i<m_bearing.size();i++)
+		{
+			if(m_bearing[i] ==x)
+			{
+				return m_nodes[i];
+			}
+		}
+		return nullptr;
 	}
 	//return 2d vector of bearing and node*
 	std::string GetName()
@@ -82,8 +97,7 @@ class Node
 		{
 			AssingNodes(3,West_node,m_map);
 		}
-	}
-	
+	}	
 };
 
 class Graph : System
@@ -108,7 +122,21 @@ class Graph : System
 	{
 		return m_map.size();
 	}
-	
+	Node* GetNode(int x)
+	{
+		return m_map[x];
+	}
+	Node* GetNode(std::string x)
+	{
+		for(unsigned int i=0;i<m_map.size();i++)
+		{
+			if((*m_map[i]).GetName()==x)
+			{
+				return m_map[i];
+			}
+		}
+		return nullptr;
+	}
 	private:
 	void GraphGeneration()
 	{
@@ -187,8 +215,7 @@ class Graph : System
 		
 		if (fileObject.is_open())
 		{
-		std::vector<std::string> results;
-		
+		std::vector<std::string> results;		
 		
 		std::string nodeName, n, e, s, w;
 		
@@ -207,6 +234,7 @@ class Graph : System
 			
 			std::cout<<path<<"\n";
 			std::cout<<"File Not found!\n";
+			exit(0);
 		}	
 		for(unsigned int i=0; i<(*txtMap).size();i=i+5)
 		{
