@@ -7,6 +7,7 @@
 #include <limits.h>
 #include <unistd.h>
 #include <fstream>
+#include <string>
 
 class System
 {
@@ -27,6 +28,7 @@ class System
     {
     system("clear");
     }
+
 
 };
 class Node
@@ -167,23 +169,22 @@ class Graph : System
 		bool genType;
 		bool correctInput=false;		
 		while(!correctInput)
-		{
-			
+		{			
 		printf("Please select generation type.\n'R' for RNG.\n'S' for STATIC.\n");
 		input=getchar();		
-		if(input==83||input==115)
+		if(input=='s'||input=='S')
 		{
 			genType=0;
 			correctInput=1;
 		}
-		else if(input==82||input==114)
+		else if(input=='r'||input=='R')
 		{
 			genType=1;
 			correctInput=1;
 		}
-		else if(input==81||input==113)
+		else if(input=='q'||input=='Q')
 		{			
-			exit(0);
+			exit(0);//todo exit return to main
 		}
 		else
 		{	ClearScreen();
@@ -232,8 +233,9 @@ class Graph : System
 		else
 		{
 			
-			std::cout<<path<<"\n";
+			std::cout<< path<<"\n";
 			std::cout<<"File Not found!\n";
+			std::cin.get();
 			exit(0);
 		}	
 		for(unsigned int i=0; i<(*txtMap).size();i=i+5)

@@ -12,7 +12,7 @@ bool CheckBearingExists(std::vector<int>& bearing,int exit)
 	}
 	return 0;
 }
-int main()
+int main()//loop check when exited
 {
 	Graph graph;	
 	
@@ -61,12 +61,12 @@ int main()
 			{
 				system("clear");		
 				std::cout<<input<<"\n";
-				printf("Please select a correct input!");
+				printf("Please select a correct input!\n");
 			}		
 	}
 	system("clear");
-	std::cout<<"You found Node: "<<endgameNode->GetName()<<"!"<<std::endl;
+	std::cout<<"You found Node: "<< endgameNode->GetName()<<"!"<<std::endl;
 	std::cout<<"Total Steps: "<<player.GetSteps()<<"\n";
+	
 	return 0;
 }
-

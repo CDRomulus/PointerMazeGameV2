@@ -1,3 +1,4 @@
+#include <iostream>
 class Player
 {
 private:
@@ -29,7 +30,8 @@ public:
 	}
 	void NavigateOptions()
 	{	
-		std::cout<<"You are at Node: "<<CurrentNode->GetName()<<std::endl;
+		std::cout<<"Total Steps: "<< GetSteps()<<"\n";
+		std::cout<<"You are at Node: "<< CurrentNode->GetName()<<std::endl;
 		
 		std::cout<<"You can go";
 		std::vector<int>& bearing = CurrentNode->GetBearings();
