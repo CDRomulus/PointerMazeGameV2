@@ -1,8 +1,16 @@
 #include "Graph.h"
 
+//class Player
 int main()
 {
-	Graph graph_one;
+	Graph graph;	
+
+	int test = graph.GetTotalNodes();
+	std::cout<<"Total Nodes = "<<test<<std::endl;
+	//int endGameNodePosition = rand() % test + 1;
 	
-	std::cin.get();
+	//while(endGameNodePosition!=playerPosition)
+	
+	return 0;
 }
+

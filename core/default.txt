@@ -1,0 +1,14 @@
+A * C F *
+B * * C *
+C B D G A
+D * E * C
+E * * * D
+F A * K J
+G C * * * 
+H I M L *
+I * * * H
+J * F * *
+K F L * *
+L H * * K
+M * * N H
+N M * * *
