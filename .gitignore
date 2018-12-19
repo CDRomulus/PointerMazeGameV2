@@ -15,3 +15,8 @@ CTestTestfile.cmake
 pointerMazeGameV2
 Makefile
 core/.codelite/
+core/src/Debug/
+*.sln
+*.vcxproj
+*.filters
+*.user

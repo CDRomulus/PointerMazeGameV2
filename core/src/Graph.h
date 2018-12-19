@@ -1,44 +1,25 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#include "CustomSystem.h"
+
 #include <vector>
 #include <iostream>
 #include <random>
 #include <limits.h>
-#include <unistd.h>
 #include <fstream>
 #include <string>
-
-class System
-{
-	protected:
-	std::string GetExeFileName()
-	{
-		char result[ PATH_MAX ];
-		ssize_t count = readlink( "/proc/self/exe", result, PATH_MAX );
-		return std::string( result, (count > 0) ? count : 0 );
-		
-	}
-	std::string GetExePath()
-	{
-		std::string f = GetExeFileName();
-		return f.substr(0, f.find_last_of("\\/"));
-	}	
-	void ClearScreen()
-    {
-    system("clear");
-    }
-
-
-};
+#include <stdexcept>
+#include <memory>
+#include <conio.h>
 class Node
 {
 	private:
 	std::string m_name;
 	std::vector<int> m_bearing;//0=north,1=east,2=south,3=west
-	std::vector<Node*> m_nodes;	//bearing pointer to nodes
+	std::vector<std::shared_ptr<Node>> m_nodes;	//bearing pointer to nodes
 	
-	void AssingNodes(int p, std::string x,std::vector<Node*> &m_map)
+	void AssingNodes(int p, std::string x,std::vector<std::shared_ptr<Node>> &m_map)
 	{
 		for(unsigned int i =0; i<m_map.size();i++)
 		{
@@ -50,21 +31,25 @@ class Node
 			}
 		}
 	}
+
 	public:
 	Node(std::string name)
-	{
-		this->m_name = name;
-		
+	{		
+		this->m_name = name;	
+		//std::cout << "Node " << this->m_name << " created!\n";
 	}
 	~Node()
 	{	
-			
+		printf("Node Destructor Called.\n");
 	}
+
+	Node(const Node&) = delete;
+
 	std::vector<int>& GetBearings()
 	{
 		return m_bearing;
 	}
-	Node* GetExit(int x)
+	std::shared_ptr<Node> GetExit(int x)
 	{
 		for(unsigned int i =0; i<m_bearing.size();i++)
 		{
@@ -75,12 +60,12 @@ class Node
 		}
 		return nullptr;
 	}
-	//return 2d vector of bearing and node*
+	
 	std::string GetName()
 	{
 		return m_name;
 	}
-	void SetBearings(std::string North_node, std::string East_node, std::string South_node, std::string West_node,std::vector<Node*> &m_map)
+	void SetBearings(std::string North_node, std::string East_node, std::string South_node, std::string West_node,std::vector<std::shared_ptr<Node>> &m_map)
 	{
 		
 		if(North_node!="*")
@@ -104,31 +89,30 @@ class Node
 
 class Graph : System
 {
-	std::vector<Node*> m_map;
-	
-	public:
+public:
 	Graph()
 	{
-		GraphGeneration();		
+		if (GraphGeneration()!=0)
+		{
+			throw(std::exception("Exit"));
+		}		
 	}
 	
 	~Graph()
-	{		
-		for(unsigned i =0; i<m_map.size();i++)
-		{						
-			delete m_map[i];				
-			m_map[i] = nullptr;				
-		}	
+	{	
+		//printf("Graph Destructor Called.\n");			
 	}
+	Graph(const Graph&) = delete;
+	
 	int GetTotalNodes()
 	{
 		return m_map.size();
 	}
-	Node* GetNode(int x)
+	std::shared_ptr<Node> GetNode(int x)
 	{
 		return m_map[x];
 	}
-	Node* GetNode(std::string x)
+	std::shared_ptr<Node> GetNode(std::string x)
 	{
 		for(unsigned int i=0;i<m_map.size();i++)
 		{
@@ -139,39 +123,51 @@ class Graph : System
 		}
 		return nullptr;
 	}
-	private:
-	void GraphGeneration()
+private:
+
+		std::vector<std::shared_ptr<Node>> m_map;
+
+	int GraphGeneration()
 	{
+		
 		ClearScreen();
+
 		
 		std::vector<std::string>* txtMap = Parsing();
-		
-		for(unsigned int i=0; i <(*txtMap).size(); i=i+5)
+		if (txtMap!=nullptr)
 		{
-			Node* focusedNode = new Node((*txtMap)[i]);	
-			m_map.push_back(focusedNode);
+			for (unsigned int i = 0; i < (*txtMap).size(); i = i + 5)
+			{
+				std::shared_ptr<Node> focusedNode = std::make_shared<Node>((*txtMap)[i]);
+					
+				m_map.push_back(focusedNode);
+			}
+			
+			for (unsigned int i = 0, x = 0; i < (*txtMap).size(); i = i + 5, x++)
+			{
+				(*m_map[x]).SetBearings((*txtMap)[i + 1], (*txtMap)[i + 2], (*txtMap)[i + 3], (*txtMap)[i + 4], m_map);
+			}
+
+			delete txtMap;
+			txtMap = nullptr;
+			return 0;
 		}
-		for(unsigned int i=0,x=0; i <(*txtMap).size(); i=i+5, x++)
+		else
 		{
-			
-			(*m_map[x]).SetBearings((*txtMap)[i+1],(*txtMap)[i+2],(*txtMap)[i+3],(*txtMap)[i+4],m_map);
+			return 1;
 		}
-		
-		delete txtMap;	
-		txtMap = nullptr;			
-			
 	}	
 	
 	std::vector<std::string>* Parsing()
 	{
-		std::vector<std::string>* txtMap;
-		int input;
+		
+		char input;
 		bool genType;
 		bool correctInput=false;		
 		while(!correctInput)
 		{			
-		printf("Please select generation type.\n'R' for RNG.\n'S' for STATIC.\n");
-		input=getchar();		
+		printf("Please select generation type.\n[R] for RNG.\n[S] for STATIC.\n");
+		input = _getch();
 		if(input=='s'||input=='S')
 		{
 			genType=0;
@@ -184,73 +180,87 @@ class Graph : System
 		}
 		else if(input=='q'||input=='Q')
 		{			
-			exit(0);//todo exit return to main
+		
 		}
 		else
-		{	ClearScreen();
+		{
+			ClearScreen();
 			printf("Incorrect Input.\n");
 		}
 		}
 		ClearScreen();
-		if(genType==1)
+		if(genType==1&& correctInput==1)
 		{
-			txtMap = randomGeneration();
-		}
-		else 
-		{
-			txtMap = staticGeneration();
-		}		
-		return txtMap;
-	}
-	std::vector<std::string>* staticGeneration()
-	{
-		std::vector<std::string>* txtMap = new std::vector<std::string>();	
-		printf("Please enter the name of .txt file of map.\n");
-		printf("Type default for DEFAULT included map.\n");
-		std::string input;
-		std::cin>>input;
-		std::string path = GetExePath()+"/"+input+".txt";
-		
-		std::ifstream fileObject(path);
-		std::string line;
-		
-		if (fileObject.is_open())
-		{
-		std::vector<std::string> results;		
-		
-		std::string nodeName, n, e, s, w;
-		
-		while (fileObject >> nodeName >> n >> e >> s >> w)
-		{
-				(*txtMap).push_back(nodeName);
-				(*txtMap).push_back(n);
-				(*txtMap).push_back(e);
-				(*txtMap).push_back(s);
-				(*txtMap).push_back(w);				
-		}		
-		fileObject.close();
-		}
-		else
-		{
-			
-			std::cout<< path<<"\n";
-			std::cout<<"File Not found!\n";
+			printf("RNG not implemented yet.\n");
+			throw(std::exception{"Exit"});
 			std::cin.get();
-			exit(0);
-		}	
-		for(unsigned int i=0; i<(*txtMap).size();i=i+5)
+			//return randomGeneration();
+		}
+		else if(genType == 0 && correctInput == 1)
 		{
 			
+			return staticGeneration();
 		}		
 		
+	}
+	std::vector<std::string>* staticGeneration() 
+	{
+		bool success=false;
+		Directory dirObject;		
+		std::string pathDir = dirObject.getPath();
+		std::ifstream fileObject;
+		std::string input;
+		std::string path;
+		std::string line;
+		std::vector<std::string>* txtMap = new std::vector<std::string>();
+		while (!success)
+		{
+			printf("Please enter the name of .txt file of map.\n");
+			printf("Type default for DEFAULT included map.\n");
+			printf("Type 'exit' to exit.\n");
+			
+			std::cin >> input;
+			
+			path = dirObject.getPath() + "/" + input + ".txt";
+			if (input=="exit")
+			{
+				throw(std::exception{"Exit"});
+			}
+			fileObject = std::ifstream(path);			
+
+			if (fileObject.is_open())
+			{				
+				std::vector<std::string> results;
+
+				std::string nodeName, n, e, s, w;
+
+				while (fileObject >> nodeName >> n >> e >> s >> w)
+				{
+					(*txtMap).push_back(nodeName);
+					(*txtMap).push_back(n);
+					(*txtMap).push_back(e);
+					(*txtMap).push_back(s);
+					(*txtMap).push_back(w);
+				}
+				fileObject.close();		
+				success = true;
+			}
+			else
+			{
+				ClearScreen();
+				std::cout << "Cannot find file: " << path << "\n";
+				
+			}
+		}
 		return txtMap;
+			
 	}
 	std::vector<std::string>* randomGeneration()
 	{
-		std::vector<std::string>* txtMap = new std::vector<std::string>();		
 		
-		printf("RNG gen!\n");
-		return txtMap;
+		std::vector<std::string>* txtMap = new std::vector<std::string>();
+		//TODO: RNG of Graph
+		return txtMap;	
 	}	
 };
 #endif

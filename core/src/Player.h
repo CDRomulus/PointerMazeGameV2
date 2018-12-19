@@ -3,20 +3,20 @@ class Player
 {
 private:
 	int steps=0;
-	Node* CurrentNode;
+	std::shared_ptr<Node> CurrentNode;
 	
 public:
-	Player(Node* x)
+	Player(std::shared_ptr<Node> x)
 	{
 		CurrentNode =x; 
 	}	
 	
-	Node* GetCurrentNode()
+	std::shared_ptr<Node> GetCurrentNode()
 	{
 		return CurrentNode;
 	}
 	
-	void SetCurrentNode(Node* x)
+	void SetCurrentNode(std::shared_ptr<Node> x)
 	{
 		CurrentNode =x;
 	}
@@ -33,28 +33,28 @@ public:
 		std::cout<<"Total Steps: "<< GetSteps()<<"\n";
 		std::cout<<"You are at Node: "<< CurrentNode->GetName()<<std::endl;
 		
-		std::cout<<"You can go";
+		std::cout<<"You can go:";
 		std::vector<int>& bearing = CurrentNode->GetBearings();
 		for(unsigned int i=0; i<bearing.size();i++)
 		{
 			
 			if(bearing[i]==0)
 			{
-				std::cout<<" [N]orth";
+				std::cout<<" [N]orth,";
 			}
 			else if(bearing[i]==1)
 			{
-				std::cout<<" [E]ast";
+				std::cout<<" [E]ast,";
 			}
 			else if(bearing[i]==2)
 			{
-				std::cout<<" [S]outh";
+				std::cout<<" [S]outh,";
 			}
 			else if(bearing[i]==3)
 			{
-				std::cout<<" [W]est";
+				std::cout<<" [W]est,";
 			}			
 		}
-		std::cout<<".\n";		
+		std::cout<<"\n[Q]uit.\n";		
 	}
 };
