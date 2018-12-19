@@ -195,9 +195,11 @@ private:
 		ClearScreen();
 		if(genType==1&& correctInput==1)
 		{
+
 			printf("RNG not implemented yet.\n");
+			WaitForInput();
 			throw std::runtime_error("Exit");
-			std::cin.get();
+			
 			//return randomGeneration();
 		}
 		else if(genType == 0 && correctInput == 1)
@@ -221,8 +223,8 @@ private:
 		while (!success)
 		{
 			printf("Please enter the name of .txt file of map.\n");
-			printf("Type default for DEFAULT included map.\n");
-			printf("Type 'exit' to exit.\n");
+			printf("Type 'default' for DEFAULT map.\n");
+			printf("Type 'exit' to EXIT.\n");
 			
 			std::cin >> input;
 			

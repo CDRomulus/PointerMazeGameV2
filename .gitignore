@@ -20,3 +20,6 @@ core/src/Debug/
 *.vcxproj
 *.filters
 *.user
+core/src/default.txt
+core/src/x64/
+

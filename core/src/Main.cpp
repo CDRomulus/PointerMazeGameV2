@@ -89,8 +89,10 @@ int main()//loop check when exited
 			else if (input == "q" || input == "Q")
 			{
 				system.ClearScreen();
-				std::cout << "You gave up on: " << player.GetSteps() << " total steps!\n";	
-				std::cout << "At Node: " << endgameNode->GetName() << "." << std::endl;
+				std::cout << "Current Node: " << player.GetCurrentNode()->GetName() <<"\n";
+				std::cout << "End Node: " << endgameNode->GetName() << "\n";
+				std::cout << "Total Steps: " << player.GetSteps() <<"\n";	
+				
 				system.WaitForInput();
 				throw std::runtime_error("Exit");
 			}

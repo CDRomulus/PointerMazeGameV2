@@ -41,7 +41,7 @@ public:
 	}
 	void WaitForInput()
 	{
-		std::cout << "Press Enter to Continue\n";
+		
 		system("PAUSE");
 	}
 };
