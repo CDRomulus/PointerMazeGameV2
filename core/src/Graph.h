@@ -128,11 +128,10 @@ private:
 		std::vector<std::shared_ptr<Node>> m_map;
 
 	int GraphGeneration()
-	{
-		
-		ClearScreen();
+	{		
 
-		
+		ClearScreen();
+				
 		std::vector<std::string>* txtMap = Parsing();
 		if (txtMap!=nullptr)
 		{
@@ -213,12 +212,11 @@ private:
 	std::vector<std::string>* staticGeneration() 
 	{
 		bool success=false;
-		Directory dirObject;		
-		std::string pathDir = dirObject.getPath();
+		Directory dirObject;	
+		
 		std::ifstream fileObject;
-		std::string input;
-		std::string path;
-		std::string line;
+		std::string input;		
+		
 		std::vector<std::string>* txtMap = new std::vector<std::string>();
 		while (!success)
 		{
@@ -226,14 +224,13 @@ private:
 			printf("Type 'default' for DEFAULT map.\n");
 			printf("Type 'exit' to EXIT.\n");
 			
-			std::cin >> input;
+			std::cin >> input;			
 			
-			path = dirObject.getPath() + "/" + input + ".txt";
 			if (input=="exit")
 			{
 				throw std::runtime_error("Exit");
 			}
-			fileObject = std::ifstream(path);			
+			fileObject = std::ifstream(dirObject.getPath() + "/" + input + ".txt");
 
 			if (fileObject.is_open())
 			{				
@@ -255,8 +252,7 @@ private:
 			else
 			{
 				ClearScreen();
-				std::cout << "Cannot find file: " << path << "\n";
-				
+				std::cout << "Cannot find file: " << dirObject.getPath() + "/" + input + ".txt" << "\n";				
 			}
 		}
 		return txtMap;

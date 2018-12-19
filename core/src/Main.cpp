@@ -37,10 +37,10 @@ int main()//loop check when exited
 		system.ClearScreen();
 		bool check=true;
 		std::string input;
+
 		while (player.GetCurrentNode() != endgameNode)
-		{
-			
-			
+		{		
+
 			std::cout << "Find Node: " << endgameNode->GetName() << "\n";
 			player.NavigateOptions();
 			if (check==false)
@@ -54,35 +54,25 @@ int main()//loop check when exited
 			if(input.size()!=1)
 			{
 			input="z";
-			}
-			
+			}			
 			if ((input == "n" || input == "N") && CheckBearingExists(player.GetCurrentNode()->GetBearings(), 0))
-			{
-				
-				
+			{			
 				player.SetCurrentNode(player.GetCurrentNode()->GetExit(0));
 				player.SetSteps();
-
 			}
 			else if ((input == "e" || input == "E") && CheckBearingExists(player.GetCurrentNode()->GetBearings(), 1))
-			{
-				
-				
+			{			
 				player.SetCurrentNode(player.GetCurrentNode()->GetExit(1));
 				player.SetSteps();
-
 			}
 			else if ((input == "s" || input == "S") && CheckBearingExists(player.GetCurrentNode()->GetBearings(), 2))
-			{
-				
-				
+			{			
 				player.SetCurrentNode(player.GetCurrentNode()->GetExit(2));
 				player.SetSteps();
 			}
 
 			else if ((input == "w" || input == "W") && CheckBearingExists(player.GetCurrentNode()->GetBearings(), 3))
-			{
-				
+			{				
 				player.SetCurrentNode(player.GetCurrentNode()->GetExit(3));
 				player.SetSteps();
 			}
@@ -100,7 +90,7 @@ int main()//loop check when exited
 			{
 				check = false;
 			}
-			
+
 			system.ClearScreen();
 		}
 		system.ClearScreen();
@@ -121,6 +111,5 @@ int main()//loop check when exited
 			return 1;			
 		}
 	}
-	return 0;
-	
+	return 0;	
 }
