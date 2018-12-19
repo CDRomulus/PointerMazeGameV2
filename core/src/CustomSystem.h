@@ -48,6 +48,11 @@ public:
 #elif defined(__linux__)
 #define PLATFORM_NAME "linux"
 #include <unistd.h>
+#include <limits.h>
+
+
+
+
 class Directory
 {
 
@@ -81,8 +86,11 @@ public:
 	}
 	void WaitForInput()
 	{
-		std::cout << "Press Enter to Continue\n";
-		pause();
+		//std::cout << "Press Enter to Continue\n";
+		
+		//std::cin.get();
+		//TODO: This doesnt work for somereason. >:(
+  
 	}
 };
 #endif

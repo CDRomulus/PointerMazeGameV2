@@ -36,7 +36,7 @@ int main()//loop check when exited
 
 		system.ClearScreen();
 		bool check=true;
-		char input = NULL;
+		std::string input;
 		while (player.GetCurrentNode() != endgameNode)
 		{
 			
@@ -49,13 +49,14 @@ int main()//loop check when exited
 			}
 			check = true;
 
-			input=NULL;			
-			while (input =='\0')
+			input="";			
+			std::cin>>input;
+			if(input.size()!=1)
 			{
-				input = _getch();
+			input="z";
 			}
 			
-			if ((input == 'n' || input == 'N') && CheckBearingExists(player.GetCurrentNode()->GetBearings(), 0))
+			if ((input == "n" || input == "N") && CheckBearingExists(player.GetCurrentNode()->GetBearings(), 0))
 			{
 				
 				
@@ -63,7 +64,7 @@ int main()//loop check when exited
 				player.SetSteps();
 
 			}
-			else if ((input == 'e' || input == 'E') && CheckBearingExists(player.GetCurrentNode()->GetBearings(), 1))
+			else if ((input == "e" || input == "E") && CheckBearingExists(player.GetCurrentNode()->GetBearings(), 1))
 			{
 				
 				
@@ -71,7 +72,7 @@ int main()//loop check when exited
 				player.SetSteps();
 
 			}
-			else if ((input == 's' || input == 'S') && CheckBearingExists(player.GetCurrentNode()->GetBearings(), 2))
+			else if ((input == "s" || input == "S") && CheckBearingExists(player.GetCurrentNode()->GetBearings(), 2))
 			{
 				
 				
@@ -79,16 +80,18 @@ int main()//loop check when exited
 				player.SetSteps();
 			}
 
-			else if ((input == 'w' || input == 'W') && CheckBearingExists(player.GetCurrentNode()->GetBearings(), 3))
+			else if ((input == "w" || input == "W") && CheckBearingExists(player.GetCurrentNode()->GetBearings(), 3))
 			{
 				
 				player.SetCurrentNode(player.GetCurrentNode()->GetExit(3));
 				player.SetSteps();
 			}
-			else if (input == 'q' || input == 'Q')
+			else if (input == "q" || input == "Q")
 			{
+				std::cout << "You gave up on: " << player.GetSteps() << " total steps!\n";	
+				std::cout << "At Node: " << endgameNode->GetName() << "." << std::endl;
 				system.WaitForInput();
-				throw(std::exception("Exit"));
+				throw std::runtime_error("Exit");
 			}
 			else
 			{
@@ -110,8 +113,10 @@ int main()//loop check when exited
 			return 0;
 		}
 		else
+		{
 			std::cout << "Exeption: " << e.what()<<"\n";
 			return 1;			
+		}
 	}
 	return 0;
 	

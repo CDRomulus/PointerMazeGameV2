@@ -11,7 +11,7 @@
 #include <string>
 #include <stdexcept>
 #include <memory>
-#include <conio.h>
+
 class Node
 {
 	private:
@@ -94,7 +94,7 @@ public:
 	{
 		if (GraphGeneration()!=0)
 		{
-			throw(std::exception("Exit"));
+			throw std::runtime_error("Exit");
 		}		
 	}
 	
@@ -161,38 +161,42 @@ private:
 	std::vector<std::string>* Parsing()
 	{
 		
-		char input;
+		std::string input;
 		bool genType;
 		bool correctInput=false;		
 		while(!correctInput)
 		{			
-		printf("Please select generation type.\n[R] for RNG.\n[S] for STATIC.\n");
-		input = _getch();
-		if(input=='s'||input=='S')
+		printf("Please select generation type.\n[R] for RNG.\n[S] for STATIC.\n[Q] to Exit.\n");
+		std::cin>>input;
+		if(input.size()!=1)
+		{
+			input="z";
+		}
+		if(input=="s"||input=="S")
 		{
 			genType=0;
 			correctInput=1;
 		}
-		else if(input=='r'||input=='R')
+		else if(input=="r"||input=="R")
 		{
 			genType=1;
 			correctInput=1;
 		}
-		else if(input=='q'||input=='Q')
+		else if(input=="q"||input=="Q")
 		{			
-		
+			throw std::runtime_error("Exit");
 		}
 		else
 		{
 			ClearScreen();
 			printf("Incorrect Input.\n");
 		}
-		}
+		
 		ClearScreen();
 		if(genType==1&& correctInput==1)
 		{
 			printf("RNG not implemented yet.\n");
-			throw(std::exception{"Exit"});
+			throw std::runtime_error("Exit");
 			std::cin.get();
 			//return randomGeneration();
 		}
@@ -201,7 +205,8 @@ private:
 			
 			return staticGeneration();
 		}		
-		
+		}
+		return nullptr;
 	}
 	std::vector<std::string>* staticGeneration() 
 	{
@@ -224,7 +229,7 @@ private:
 			path = dirObject.getPath() + "/" + input + ".txt";
 			if (input=="exit")
 			{
-				throw(std::exception{"Exit"});
+				throw std::runtime_error("Exit");
 			}
 			fileObject = std::ifstream(path);			
 
