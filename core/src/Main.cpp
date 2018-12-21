@@ -1,12 +1,12 @@
 #include "Graph.h"
 #include "Player.h"
-#include <stdio.h>
 
-bool CheckBearingExists(std::vector<int>& bearing,int exit)
+
+bool CheckBearingExists(const std::vector<Bearing>& bea,Bearing x)
 {
-	for(unsigned int i=0; i<bearing.size();i++)
+	for(unsigned int i=0; i<bea.size();i++)
 	{
-		if(bearing[i]==exit)
+		if(bea[i]==x)
 		{
 			return 1;
 		}
@@ -25,16 +25,15 @@ int main()//loop check when exited
 {
 	try {
 
-		Graph graph;
-		System system;
+		Graph graph;				
 
 		int totalNodes = graph.GetTotalNodes();
 		int random_integer=rngIntGen(totalNodes-4, totalNodes);
-		std::shared_ptr<Node> endgameNode = graph.GetNode(random_integer-1);
+		Node* endgameNode = graph.GetNode(random_integer-1);
 
-		Player player(graph.GetNode(0));
+		Player player(graph.GetNode(0));//Get first Node
 
-		system.ClearScreen();
+		System::ClearScreen();
 		bool check=true;
 		std::string input;
 
@@ -55,35 +54,35 @@ int main()//loop check when exited
 			{
 			input="z";
 			}			
-			if ((input == "n" || input == "N") && CheckBearingExists(player.GetCurrentNode()->GetBearings(), 0))
+			if ((input == "n" || input == "N") && CheckBearingExists(player.GetCurrentNode()->GetAvailableBearings(), Bearing::NORTH))
 			{			
-				player.SetCurrentNode(player.GetCurrentNode()->GetExit(0));
+				player.SetCurrentNode(player.GetCurrentNode()->GetExit(Bearing::NORTH));
 				player.SetSteps();
 			}
-			else if ((input == "e" || input == "E") && CheckBearingExists(player.GetCurrentNode()->GetBearings(), 1))
+			else if ((input == "e" || input == "E") && CheckBearingExists(player.GetCurrentNode()->GetAvailableBearings(), Bearing::EAST))
 			{			
-				player.SetCurrentNode(player.GetCurrentNode()->GetExit(1));
+				player.SetCurrentNode(player.GetCurrentNode()->GetExit(Bearing::EAST));
 				player.SetSteps();
 			}
-			else if ((input == "s" || input == "S") && CheckBearingExists(player.GetCurrentNode()->GetBearings(), 2))
+			else if ((input == "s" || input == "S") && CheckBearingExists(player.GetCurrentNode()->GetAvailableBearings(), Bearing::SOUTH))
 			{			
-				player.SetCurrentNode(player.GetCurrentNode()->GetExit(2));
+				player.SetCurrentNode(player.GetCurrentNode()->GetExit(Bearing::SOUTH));
 				player.SetSteps();
 			}
 
-			else if ((input == "w" || input == "W") && CheckBearingExists(player.GetCurrentNode()->GetBearings(), 3))
+			else if ((input == "w" || input == "W") && CheckBearingExists(player.GetCurrentNode()->GetAvailableBearings(), Bearing::WEST))
 			{				
-				player.SetCurrentNode(player.GetCurrentNode()->GetExit(3));
+				player.SetCurrentNode(player.GetCurrentNode()->GetExit(Bearing::WEST));
 				player.SetSteps();
 			}
 			else if (input == "q" || input == "Q")
 			{
-				system.ClearScreen();
+				System::ClearScreen();
 				std::cout << "Current Node: " << player.GetCurrentNode()->GetName() <<"\n";
 				std::cout << "End Node: " << endgameNode->GetName() << "\n";
 				std::cout << "Total Steps: " << player.GetSteps() <<"\n";	
 				
-				system.WaitForInput();
+				System::WaitForInput();
 				throw std::runtime_error("Exit");
 			}
 			else
@@ -91,18 +90,18 @@ int main()//loop check when exited
 				check = false;
 			}
 
-			system.ClearScreen();
+			System::ClearScreen();
 		}
-		system.ClearScreen();
+		System::ClearScreen();
 		std::cout << "You found Node: " << endgameNode->GetName() << "!" << std::endl;
-		std::cout << "Total Steps: " << player.GetSteps() << "\n";	
-		system.WaitForInput();
+		std::cout << "Total Steps: " << player.GetSteps() << "\n";			
 	}	
-	catch (const std::exception& e)
+	catch (const std::exception& e) 
 	{
 		std::string ex = e.what();
 		if (ex == "Exit")
 		{
+			e.~exception();
 			return 0;
 		}
 		else

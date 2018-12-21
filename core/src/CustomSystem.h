@@ -1,16 +1,13 @@
 #pragma once
 
-#include <string>
-#include <thread>        
+#include <string>     
 #include <chrono>
 #include <iostream>
 
 #if defined(_WIN32)
-#define PLATFORM_NAME "windows" // Windows
 #include <windows.h>
 class Directory
 {
-
 private:
 	std::string path;
 	std::string exePath;
@@ -32,30 +29,26 @@ public:
 		return this->exePath;
 	}
 };
-class System
+namespace System 
 {
-public:
-	void ClearScreen()
+	extern void ClearScreen()
 	{
 		system("cls");
 	}
-	void WaitForInput()
+	extern void WaitForInput()
 	{
-		
+
 		system("PAUSE");
 	}
 };
+	
+
 #elif defined(__linux__)
-#define PLATFORM_NAME "linux"
 #include <unistd.h>
 #include <limits.h>
 
-
-
-
 class Directory
 {
-
 private:
 	std::string path;
 	std::string exePath;
@@ -77,22 +70,17 @@ public:
 		return this->exePath;
 	}
 };
-class System
-{
-public:
-	void ClearScreen()
+	extern void ClearScreen()
 	{
 		system("clear");
 	}
-	void WaitForInput()
+	extern void WaitForInput()
 	{
 		//std::cout << "Press Enter to Continue\n";
 		
 		//std::cin.get();
-		//TODO: This doesnt work for somereason. >:(
-  
+		//TODO: This doesnt work for somereason. >:(  
 	}
-};
 #endif
 
 

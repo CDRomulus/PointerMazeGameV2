@@ -11,15 +11,19 @@
 #include <string>
 #include <stdexcept>
 #include <memory>
-
+enum class Bearing
+{
+	NORTH = 0, EAST, SOUTH, WEST
+};
 class Node
 {
 	private:
 	std::string m_name;
-	std::vector<int> m_bearing;//0=north,1=east,2=south,3=west
-	std::vector<std::shared_ptr<Node>> m_nodes;	//bearing pointer to nodes
 	
-	void AssingNodes(int p, std::string x,std::vector<std::shared_ptr<Node>> &m_map)
+	std::vector<Bearing> m_bearing;//0=north,1=east,2=south,3=west
+	std::vector<Node*> m_nodes;	//bearing pointer to nodes
+	
+	void AssingNodes(Bearing p, const std::string x, std::vector<Node*> &m_map)
 	{
 		for(unsigned int i =0; i<m_map.size();i++)
 		{
@@ -33,23 +37,28 @@ class Node
 	}
 
 	public:
+	
 	Node(std::string name)
 	{		
 		this->m_name = name;	
-		//std::cout << "Node " << this->m_name << " created!\n";
 	}
 	~Node()
 	{	
-		printf("Node Destructor Called.\n");
+		std::cout << "Node Destructor Called: " << m_name << "\n";
+		
+		for (auto nodes : m_nodes)
+		{			
+			nodes = nullptr;
+		}
 	}
 
 	Node(const Node&) = delete;
 
-	std::vector<int>& GetBearings()
+	const std::vector<Bearing>& GetAvailableBearings()
 	{
 		return m_bearing;
 	}
-	std::shared_ptr<Node> GetExit(int x)
+	Node* GetExit(Bearing x)
 	{
 		for(unsigned int i =0; i<m_bearing.size();i++)
 		{
@@ -65,29 +74,29 @@ class Node
 	{
 		return m_name;
 	}
-	void SetBearings(std::string North_node, std::string East_node, std::string South_node, std::string West_node,std::vector<std::shared_ptr<Node>> &m_map)
+	void SetBearings(std::string North_node, std::string East_node, std::string South_node, const std::string West_node, std::vector<Node*> &m_map)
 	{
 		
 		if(North_node!="*")
 		{
-			AssingNodes(0,North_node,m_map);
+			AssingNodes(Bearing::NORTH,North_node,m_map);
 		}
 		if(East_node!="*")
 		{
-			AssingNodes(1,East_node,m_map);
+			AssingNodes(Bearing::EAST,East_node,m_map);
 		}
 		if(South_node!="*")
 		{
-			AssingNodes(2,South_node,m_map);
+			AssingNodes(Bearing::SOUTH,South_node,m_map);
 		}
 		if(West_node!="*")
 		{
-			AssingNodes(3,West_node,m_map);
+			AssingNodes(Bearing::WEST,West_node,m_map);
 		}
 	}	
 };
 
-class Graph : System
+class Graph
 {
 public:
 	Graph()
@@ -100,7 +109,14 @@ public:
 	
 	~Graph()
 	{	
-		//printf("Graph Destructor Called.\n");			
+		printf("Graph Destructor Called.\n");	
+		for (auto nodes : m_map)
+		{			
+			delete nodes;
+			nodes = nullptr;
+		}
+		
+		System::WaitForInput();
 	}
 	Graph(const Graph&) = delete;
 	
@@ -108,11 +124,11 @@ public:
 	{
 		return m_map.size();
 	}
-	std::shared_ptr<Node> GetNode(int x)
+	Node* GetNode(int x)
 	{
 		return m_map[x];
 	}
-	std::shared_ptr<Node> GetNode(std::string x)
+	Node* GetNode(std::string x)
 	{
 		for(unsigned int i=0;i<m_map.size();i++)
 		{
@@ -125,25 +141,22 @@ public:
 	}
 private:
 
-		std::vector<std::shared_ptr<Node>> m_map;
+	std::vector<Node*> m_map;	
 
 	int GraphGeneration()
-	{		
-
-		ClearScreen();
+	{
+		System::ClearScreen();
 				
 		std::vector<std::string>* txtMap = Parsing();
 		if (txtMap!=nullptr)
 		{
 			for (unsigned int i = 0; i < (*txtMap).size(); i = i + 5)
-			{
-				std::shared_ptr<Node> focusedNode = std::make_shared<Node>((*txtMap)[i]);
-					
-				m_map.push_back(focusedNode);
+			{								
+				m_map.push_back(new Node((*txtMap)[i]));
 			}
 			
-			for (unsigned int i = 0, x = 0; i < (*txtMap).size(); i = i + 5, x++)
-			{
+			for (size_t i = 0, x = 0; i < (*txtMap).size(); i = i + 5, x++)
+			{				
 				(*m_map[x]).SetBearings((*txtMap)[i + 1], (*txtMap)[i + 2], (*txtMap)[i + 3], (*txtMap)[i + 4], m_map);
 			}
 
@@ -161,7 +174,7 @@ private:
 	{
 		
 		std::string input;
-		bool genType;
+		bool genType=0;
 		bool correctInput=false;		
 		while(!correctInput)
 		{			
@@ -187,16 +200,16 @@ private:
 		}
 		else
 		{
-			ClearScreen();
+			System::ClearScreen();
 			printf("Incorrect Input.\n");
 		}
 		
-		ClearScreen();
+		System::ClearScreen();
 		if(genType==1&& correctInput==1)
 		{
 
 			printf("RNG not implemented yet.\n");
-			WaitForInput();
+			System::WaitForInput();
 			throw std::runtime_error("Exit");
 			
 			//return randomGeneration();
@@ -251,16 +264,14 @@ private:
 			}
 			else
 			{
-				ClearScreen();
+				System::ClearScreen();
 				std::cout << "Cannot find file: " << dirObject.getPath() + "/" + input + ".txt" << "\n";				
 			}
 		}
-		return txtMap;
-			
+		return txtMap;			
 	}
 	std::vector<std::string>* randomGeneration()
-	{
-		
+	{		
 		std::vector<std::string>* txtMap = new std::vector<std::string>();
 		//TODO: RNG of Graph
 		return txtMap;	

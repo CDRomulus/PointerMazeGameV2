@@ -3,20 +3,20 @@ class Player
 {
 private:
 	int steps=0;
-	std::shared_ptr<Node> CurrentNode;
+	Node* CurrentNode;
 	
 public:
-	Player(std::shared_ptr<Node> x)
+	Player(Node* x)
 	{
 		CurrentNode =x; 
 	}	
 	
-	std::shared_ptr<Node> GetCurrentNode()
+	Node* GetCurrentNode()
 	{
 		return CurrentNode;
 	}
 	
-	void SetCurrentNode(std::shared_ptr<Node> x)
+	void SetCurrentNode(Node* x)
 	{
 		CurrentNode =x;
 	}
@@ -34,27 +34,27 @@ public:
 		std::cout<<"You are at Node: "<< CurrentNode->GetName()<<std::endl;
 		
 		std::cout<<"You can go:";
-		std::vector<int>& bearing = CurrentNode->GetBearings();
-		for(unsigned int i=0; i<bearing.size();i++)
+		const std::vector<Bearing>& availableBearings = CurrentNode->GetAvailableBearings();
+		for(unsigned int i=0; i<availableBearings.size();i++)
 		{
 			
-			if(bearing[i]==0)
+			if(availableBearings[i]==Bearing::NORTH)
 			{
 				std::cout<<" [N]orth,";
 			}
-			else if(bearing[i]==1)
+			else if(availableBearings[i]== Bearing::EAST)
 			{
 				std::cout<<" [E]ast,";
 			}
-			else if(bearing[i]==2)
+			else if(availableBearings[i]== Bearing::SOUTH)
 			{
 				std::cout<<" [S]outh,";
 			}
-			else if(bearing[i]==3)
+			else if(availableBearings[i]== Bearing::WEST)
 			{
 				std::cout<<" [W]est,";
 			}			
 		}
-		std::cout<<"\n[Q]uit.\n";		
+		std::cout<<"\n[Q]uit.\n";	
 	}
 };
