@@ -116,7 +116,7 @@ public:
 			nodes = nullptr;
 		}
 		
-		System::WaitForInput();
+		CustomSystem::WaitForInput();
 	}
 	Graph(const Graph&) = delete;
 	
@@ -145,7 +145,7 @@ private:
 
 	int GraphGeneration()
 	{
-		System::ClearScreen();
+		CustomSystem::ClearScreen();
 				
 		std::vector<std::string>* txtMap = Parsing();
 		if (txtMap!=nullptr)
@@ -200,16 +200,16 @@ private:
 		}
 		else
 		{
-			System::ClearScreen();
+			CustomSystem::ClearScreen();
 			printf("Incorrect Input.\n");
 		}
 		
-		System::ClearScreen();
+		CustomSystem::ClearScreen();
 		if(genType==1&& correctInput==1)
 		{
 
 			printf("RNG not implemented yet.\n");
-			System::WaitForInput();
+			CustomSystem::WaitForInput();
 			throw std::runtime_error("Exit");
 			
 			//return randomGeneration();
@@ -225,7 +225,7 @@ private:
 	std::vector<std::string>* staticGeneration() 
 	{
 		bool success=false;
-		Directory dirObject;	
+		CustomSystem::Directory dirObject;	
 		
 		std::ifstream fileObject;
 		std::string input;		
@@ -243,7 +243,7 @@ private:
 			{
 				throw std::runtime_error("Exit");
 			}
-			fileObject = std::ifstream(dirObject.getPath() + "/" + input + ".txt");
+			fileObject = std::ifstream(dirObject.getDir() + "/" + input + ".txt");
 
 			if (fileObject.is_open())
 			{				
@@ -264,8 +264,8 @@ private:
 			}
 			else
 			{
-				System::ClearScreen();
-				std::cout << "Cannot find file: " << dirObject.getPath() + "/" + input + ".txt" << "\n";				
+				CustomSystem::ClearScreen();
+				std::cout << "Cannot find file: " << dirObject.getDir() + "/" + input + ".txt" << "\n";				
 			}
 		}
 		return txtMap;			

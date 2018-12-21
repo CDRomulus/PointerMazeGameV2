@@ -6,30 +6,8 @@
 
 #if defined(_WIN32)
 #include <windows.h>
-class Directory
-{
-private:
-	std::string path;
-	std::string exePath;
-public:
-	Directory()
-	{
-		char buffer[MAX_PATH];
-		GetModuleFileName(NULL, buffer, MAX_PATH);
-		this->exePath = std::string(buffer);
 
-		this->path = this->exePath.substr(0, this->exePath.find_last_of("\\/"));
-	}
-	std::string getPath()
-	{
-		return this->path;
-	}
-	std::string getExePath()
-	{
-		return this->exePath;
-	}
-};
-namespace System 
+namespace CustomSystem 
 {
 	extern void ClearScreen()
 	{
@@ -37,39 +15,37 @@ namespace System
 	}
 	extern void WaitForInput()
 	{
-
 		system("PAUSE");
 	}
+	class Directory
+	{
+	private:
+		std::string path;
+		std::string exePath;
+	public:
+		Directory()
+		{
+			char buffer[MAX_PATH];
+			GetModuleFileName(NULL, buffer, MAX_PATH);
+			this->exePath = std::string(buffer);
+
+			this->path = this->exePath.substr(0, this->exePath.find_last_of("\\/"));
+		}
+		std::string getDir()
+		{
+			return this->path;
+		}
+		std::string getExeDir()
+		{
+			return this->exePath;
+		}
+	};
 };
-	
 
 #elif defined(__linux__)
 #include <unistd.h>
 #include <limits.h>
 
-class Directory
-{
-private:
-	std::string path;
-	std::string exePath;
-public:
-	Directory()
-	{
-		char result[PATH_MAX];
-		ssize_t count = readlink("/proc/self/exe", result, PATH_MAX);
-		this->exePath= std::string(result, (count > 0) ? count : 0);		
-
-		this->path = this->exePath.substr(0, this->exePath.find_last_of("\\/"));
-	}
-	std::string getPath()
-	{
-		return this->path;
-	}
-	std::string getExePath()
-	{
-		return this->exePath;
-	}
-};
 	extern void ClearScreen()
 	{
 		system("clear");
@@ -81,6 +57,29 @@ public:
 		//std::cin.get();
 		//TODO: This doesnt work for somereason. >:(  
 	}
+	class Directory
+	{
+	private:
+		std::string path;
+		std::string exePath;
+	public:
+		Directory()
+		{
+			char result[PATH_MAX];
+			ssize_t count = readlink("/proc/self/exe", result, PATH_MAX);
+			this->exePath = std::string(result, (count > 0) ? count : 0);
+
+			this->path = this->exePath.substr(0, this->exePath.find_last_of("\\/"));
+		}
+		std::string getPath()
+		{
+			return this->path;
+		}
+		std::string getExePath()
+		{
+			return this->exePath;
+		}
+};
 #endif
 
 

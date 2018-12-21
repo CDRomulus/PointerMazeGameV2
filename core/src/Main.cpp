@@ -33,7 +33,7 @@ int main()//loop check when exited
 
 		Player player(graph.GetNode(0));//Get first Node
 
-		System::ClearScreen();
+		CustomSystem::ClearScreen();
 		bool check=true;
 		std::string input;
 
@@ -77,12 +77,12 @@ int main()//loop check when exited
 			}
 			else if (input == "q" || input == "Q")
 			{
-				System::ClearScreen();
+				CustomSystem::ClearScreen();
 				std::cout << "Current Node: " << player.GetCurrentNode()->GetName() <<"\n";
 				std::cout << "End Node: " << endgameNode->GetName() << "\n";
 				std::cout << "Total Steps: " << player.GetSteps() <<"\n";	
 				
-				System::WaitForInput();
+				CustomSystem::WaitForInput();
 				throw std::runtime_error("Exit");
 			}
 			else
@@ -90,9 +90,9 @@ int main()//loop check when exited
 				check = false;
 			}
 
-			System::ClearScreen();
+			CustomSystem::ClearScreen();
 		}
-		System::ClearScreen();
+		CustomSystem::ClearScreen();
 		std::cout << "You found Node: " << endgameNode->GetName() << "!" << std::endl;
 		std::cout << "Total Steps: " << player.GetSteps() << "\n";			
 	}	
