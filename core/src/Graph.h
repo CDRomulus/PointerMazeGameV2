@@ -10,7 +10,8 @@
 #include <fstream>
 #include <string>
 #include <stdexcept>
-#include <memory>
+#include <algorithm>
+
 enum class Bearing
 {
 	NORTH = 0, EAST, SOUTH, WEST
@@ -21,7 +22,7 @@ class Node
 	std::string m_name;
 	
 	std::vector<Bearing> m_bearing;//0=north,1=east,2=south,3=west
-	std::vector<Node*> m_nodes;	//bearing pointer to nodes
+	std::vector<Node*> m_nodes;	//list of pointers to nodes
 	
 	void AssingNodes(Bearing p, const std::string x, std::vector<Node*> &m_map)
 	{
@@ -45,11 +46,11 @@ class Node
 	~Node()
 	{	
 		std::cout << "Node Destructor Called: " << m_name << "\n";
-		
-		for (auto nodes : m_nodes)
-		{			
-			nodes = nullptr;
+		for(unsigned int x;x<m_nodes.size();x++)
+		{
+			m_nodes[x]=nullptr;
 		}
+		
 	}
 
 	Node(const Node&) = delete;
@@ -115,8 +116,8 @@ public:
 			delete nodes;
 			nodes = nullptr;
 		}
-		
 		CustomSystem::WaitForInput();
+		
 	}
 	Graph(const Graph&) = delete;
 	

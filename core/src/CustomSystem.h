@@ -45,7 +45,8 @@ namespace CustomSystem
 #elif defined(__linux__)
 #include <unistd.h>
 #include <limits.h>
-
+namespace CustomSystem 
+{
 	extern void ClearScreen()
 	{
 		system("clear");
@@ -71,14 +72,15 @@ namespace CustomSystem
 
 			this->path = this->exePath.substr(0, this->exePath.find_last_of("\\/"));
 		}
-		std::string getPath()
+		std::string getDir()
 		{
 			return this->path;
 		}
-		std::string getExePath()
+		std::string getExeDir()
 		{
 			return this->exePath;
 		}
+	};
 };
 #endif
 
