@@ -2,25 +2,21 @@
 #include "Player.h"
 
 
-bool CheckBearingExists(const std::vector<Bearing>& bea,Bearing x)
+bool CheckAndExecute(Player& player,const Bearing x)
 {
-	for(unsigned int i=0; i<bea.size();i++)
+	
+	for(unsigned int i=0; i<player.GetCurrentNode()->GetAvailableBearings().size();i++)
 	{
-		if(bea[i]==x)
+		if(player.GetCurrentNode()->GetAvailableBearings()[i]==x)
 		{
+			player.SetCurrentNode(player.GetCurrentNode()->GetExit(x));
+			player.SetSteps();
 			return 1;
 		}
 	}
 	return 0;
 }
-int rngIntGen(int l_thresh, int h_thresh)
-{
-	std::random_device rd;     // only used once to initialise (seed) engine
-	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
-	std::uniform_int_distribution<int> uni(l_thresh, h_thresh); // guaranteed unbiased
-	auto random_integer = uni(rng);
-	return random_integer;
-}
+
 int main()//loop check when exited
 {
 	try {
@@ -28,7 +24,7 @@ int main()//loop check when exited
 		Graph graph;				
 
 		int totalNodes = graph.GetTotalNodes();
-		int random_integer=rngIntGen(totalNodes-4, totalNodes);
+		int random_integer= CustomSystem::rngIntGen(totalNodes-4, totalNodes);
 		Node* endgameNode = graph.GetNode(random_integer-1);
 
 		Player player(graph.GetNode(0));//Get first Node
@@ -54,26 +50,17 @@ int main()//loop check when exited
 			{
 			input="z";
 			}			
-			if ((input == "n" || input == "N") && CheckBearingExists(player.GetCurrentNode()->GetAvailableBearings(), Bearing::NORTH))
-			{			
-				player.SetCurrentNode(player.GetCurrentNode()->GetExit(Bearing::NORTH));
-				player.SetSteps();
+			if ((input == "n" || input == "N") && CheckAndExecute(player, Bearing::NORTH))
+			{					
 			}
-			else if ((input == "e" || input == "E") && CheckBearingExists(player.GetCurrentNode()->GetAvailableBearings(), Bearing::EAST))
-			{			
-				player.SetCurrentNode(player.GetCurrentNode()->GetExit(Bearing::EAST));
-				player.SetSteps();
-			}
-			else if ((input == "s" || input == "S") && CheckBearingExists(player.GetCurrentNode()->GetAvailableBearings(), Bearing::SOUTH))
-			{			
-				player.SetCurrentNode(player.GetCurrentNode()->GetExit(Bearing::SOUTH));
-				player.SetSteps();
-			}
-
-			else if ((input == "w" || input == "W") && CheckBearingExists(player.GetCurrentNode()->GetAvailableBearings(), Bearing::WEST))
+			else if ((input == "e" || input == "E") && CheckAndExecute(player, Bearing::EAST))
 			{				
-				player.SetCurrentNode(player.GetCurrentNode()->GetExit(Bearing::WEST));
-				player.SetSteps();
+			}
+			else if ((input == "s" || input == "S") && CheckAndExecute(player, Bearing::SOUTH))
+			{					
+			}
+			else if ((input == "w" || input == "W") && CheckAndExecute(player, Bearing::WEST))
+			{					
 			}
 			else if (input == "q" || input == "Q")
 			{
@@ -82,7 +69,7 @@ int main()//loop check when exited
 				std::cout << "End Node: " << endgameNode->GetName() << "\n";
 				std::cout << "Total Steps: " << player.GetSteps() <<"\n";	
 				
-				CustomSystem::WaitForInput();
+				
 				throw std::runtime_error("Exit");
 			}
 			else
@@ -102,6 +89,8 @@ int main()//loop check when exited
 		if (ex == "Exit")
 		{
 			e.~exception();
+			std::cout << "\nPress enter to exit.";
+			CustomSystem::WaitForInput();
 			return 0;
 		}
 		else

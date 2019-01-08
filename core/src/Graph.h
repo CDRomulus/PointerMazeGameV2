@@ -1,11 +1,9 @@
-#ifndef GRAPH_H
-#define GRAPH_H
+#pragma once
 
 #include "CustomSystem.h"
 
 #include <vector>
 #include <iostream>
-#include <random>
 #include <limits.h>
 #include <fstream>
 #include <string>
@@ -278,4 +276,3 @@ private:
 		return txtMap;	
 	}	
 };
-#endif

@@ -3,7 +3,22 @@
 #include <string>     
 #include <chrono>
 #include <iostream>
-
+#include <random>
+namespace CustomSystem
+{
+	extern int rngIntGen(int l_thresh, int h_thresh)
+{
+	std::random_device rd;     // only used once to initialise (seed) engine
+	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
+	std::uniform_int_distribution<int> uni(l_thresh, h_thresh); // guaranteed unbiased
+	auto random_integer = uni(rng);
+	return random_integer;
+}
+extern void WaitForInput()
+	{
+		std::cin.get();
+	}
+};
 #if defined(_WIN32)
 #include <windows.h>
 
@@ -11,12 +26,10 @@ namespace CustomSystem
 {
 	extern void ClearScreen()
 	{
-		system("cls");
+		std::cout<<"\nPress enter to continue.";
+		std::cin.get();
 	}
-	extern void WaitForInput()
-	{
-		system("PAUSE");
-	}
+	
 	class Directory
 	{
 	private:
@@ -50,14 +63,7 @@ namespace CustomSystem
 	extern void ClearScreen()
 	{
 		system("clear");
-	}
-	extern void WaitForInput()
-	{
-		//std::cout << "Press Enter to Continue\n";
-		
-		//std::cin.get();
-		//TODO: This doesnt work for somereason. >:(  
-	}
+	}	
 	class Directory
 	{
 	private:
