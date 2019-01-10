@@ -18,10 +18,10 @@ class Node
 {
 	private:
 	std::string m_name;
-	
+
 	std::vector<Bearing> m_bearing;//0=north,1=east,2=south,3=west
 	std::vector<Node*> m_nodes;	//list of pointers to nodes
-	
+
 	void AssingNodes(Bearing p, const std::string x, std::vector<Node*> &m_map)
 	{
 		for(unsigned int i =0; i<m_map.size();i++)
@@ -36,19 +36,19 @@ class Node
 	}
 
 	public:
-	
+
 	Node(std::string name)
-	{		
-		this->m_name = name;	
+	{
+		this->m_name = name;
 	}
 	~Node()
-	{	
+	{
 		std::cout << "Node Destructor Called: " << m_name << "\n";
 		for(unsigned int x;x<m_nodes.size();x++)
 		{
 			m_nodes[x]=nullptr;
 		}
-		
+
 	}
 
 	Node(const Node&) = delete;
@@ -68,14 +68,14 @@ class Node
 		}
 		return nullptr;
 	}
-	
+
 	std::string GetName()
 	{
 		return m_name;
 	}
 	void SetBearings(std::string North_node, std::string East_node, std::string South_node, const std::string West_node, std::vector<Node*> &m_map)
 	{
-		
+
 		if(North_node!="*")
 		{
 			AssingNodes(Bearing::NORTH,North_node,m_map);
@@ -92,7 +92,7 @@ class Node
 		{
 			AssingNodes(Bearing::WEST,West_node,m_map);
 		}
-	}	
+	}
 };
 
 class Graph
@@ -103,22 +103,22 @@ public:
 		if (GraphGeneration()!=0)
 		{
 			throw std::runtime_error("Exit");
-		}		
+		}
 	}
-	
+
 	~Graph()
-	{	
-		printf("Graph Destructor Called.\n");	
+	{
+		printf("Graph Destructor Called.\n");
 		for (auto nodes : m_map)
-		{			
+		{
 			delete nodes;
 			nodes = nullptr;
 		}
-		CustomSystem::WaitForInput();
-		
+
+
 	}
 	Graph(const Graph&) = delete;
-	
+
 	int GetTotalNodes()
 	{
 		return m_map.size();
@@ -140,22 +140,22 @@ public:
 	}
 private:
 
-	std::vector<Node*> m_map;	
+	std::vector<Node*> m_map;
 
 	int GraphGeneration()
 	{
 		CustomSystem::ClearScreen();
-				
+
 		std::vector<std::string>* txtMap = Parsing();
 		if (txtMap!=nullptr)
 		{
 			for (unsigned int i = 0; i < (*txtMap).size(); i = i + 5)
-			{								
+			{
 				m_map.push_back(new Node((*txtMap)[i]));
 			}
-			
+
 			for (size_t i = 0, x = 0; i < (*txtMap).size(); i = i + 5, x++)
-			{				
+			{
 				(*m_map[x]).SetBearings((*txtMap)[i + 1], (*txtMap)[i + 2], (*txtMap)[i + 3], (*txtMap)[i + 4], m_map);
 			}
 
@@ -167,16 +167,16 @@ private:
 		{
 			return 1;
 		}
-	}	
-	
+	}
+
 	std::vector<std::string>* Parsing()
 	{
-		
+
 		std::string input;
 		bool genType=0;
-		bool correctInput=false;		
+		bool correctInput=false;
 		while(!correctInput)
-		{			
+		{
 		printf("Please select generation type.\n[R] for RNG.\n[S] for STATIC.\n[Q] to Exit.\n");
 		std::cin>>input;
 		if(input.size()!=1)
@@ -194,7 +194,7 @@ private:
 			correctInput=1;
 		}
 		else if(input=="q"||input=="Q")
-		{			
+		{
 			throw std::runtime_error("Exit");
 		}
 		else
@@ -202,50 +202,51 @@ private:
 			CustomSystem::ClearScreen();
 			printf("Incorrect Input.\n");
 		}
-		
+
 		CustomSystem::ClearScreen();
 		if(genType==1&& correctInput==1)
 		{
 
 			printf("RNG not implemented yet.\n");
-			CustomSystem::WaitForInput();
+
 			throw std::runtime_error("Exit");
-			
+
 			//return randomGeneration();
 		}
 		else if(genType == 0 && correctInput == 1)
 		{
-			
+
 			return staticGeneration();
-		}		
+		}
 		}
 		return nullptr;
 	}
-	std::vector<std::string>* staticGeneration() 
+	std::vector<std::string>* staticGeneration()
 	{
 		bool success=false;
-		CustomSystem::Directory dirObject;	
-		
+		CustomSystem::Directory dirObject;
+
 		std::ifstream fileObject;
-		std::string input;		
-		
+		std::string input;
+
 		std::vector<std::string>* txtMap = new std::vector<std::string>();
 		while (!success)
 		{
 			printf("Please enter the name of .txt file of map.\n");
 			printf("Type 'default' for DEFAULT map.\n");
 			printf("Type 'exit' to EXIT.\n");
-			
-			std::cin >> input;			
-			
+
+			std::cin >> input;
+
 			if (input=="exit")
 			{
+                CustomSystem::ClearScreen();
 				throw std::runtime_error("Exit");
 			}
 			fileObject = std::ifstream(dirObject.getDir() + "/" + input + ".txt");
 
 			if (fileObject.is_open())
-			{				
+			{
 				std::vector<std::string> results;
 
 				std::string nodeName, n, e, s, w;
@@ -258,21 +259,21 @@ private:
 					(*txtMap).push_back(s);
 					(*txtMap).push_back(w);
 				}
-				fileObject.close();		
+				fileObject.close();
 				success = true;
 			}
 			else
 			{
 				CustomSystem::ClearScreen();
-				std::cout << "Cannot find file: " << dirObject.getDir() + "/" + input + ".txt" << "\n";				
+				std::cout << "Cannot find file: " << dirObject.getDir() + "/" + input + ".txt" << "\n";
 			}
 		}
-		return txtMap;			
+		return txtMap;
 	}
 	std::vector<std::string>* randomGeneration()
-	{		
+	{
 		std::vector<std::string>* txtMap = new std::vector<std::string>();
 		//TODO: RNG of Graph
-		return txtMap;	
-	}	
+		return txtMap;
+	}
 };

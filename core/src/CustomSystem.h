@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>     
+#include <string>
 #include <chrono>
 #include <iostream>
 #include <random>
@@ -14,22 +14,18 @@ namespace CustomSystem
 	auto random_integer = uni(rng);
 	return random_integer;
 }
-extern void WaitForInput()
-	{
-		std::cin.get();
-	}
+
 };
 #if defined(_WIN32)
 #include <windows.h>
 
-namespace CustomSystem 
+namespace CustomSystem
 {
 	extern void ClearScreen()
 	{
 		std::cout<<"\nPress enter to continue.";
 		std::cin.get();
 	}
-	
 	class Directory
 	{
 	private:
@@ -58,12 +54,13 @@ namespace CustomSystem
 #elif defined(__linux__)
 #include <unistd.h>
 #include <limits.h>
-namespace CustomSystem 
+
+namespace CustomSystem
 {
 	extern void ClearScreen()
 	{
 		system("clear");
-	}	
+	}
 	class Directory
 	{
 	private:
