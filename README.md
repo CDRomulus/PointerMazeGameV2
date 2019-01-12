@@ -5,5 +5,5 @@ Implemented with linked list references on each Node.
 
 Uses a mixture of smart pointers and regular pointers.
 
-Linux and Windows compiler ready. 
+gcc compiler ready.
 
