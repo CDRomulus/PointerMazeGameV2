@@ -138,9 +138,24 @@ public:
 		}
 		return nullptr;
 	}
+	int getGenType()
+	{
+        return genType;
+	}
+	std::string getFileName()
+	{
+        if(getGenType()==1)
+        {
+            return "RNG";
+        }
+        else
+        return fileName;
+	}
 private:
 
 	std::vector<Node*> m_map;
+    int genType;
+    std::string fileName;
 
 	int GraphGeneration()
 	{
@@ -173,7 +188,6 @@ private:
 	{
 
 		std::string input;
-		bool genType=0;
 		bool correctInput=false;
 		while(!correctInput)
 		{
@@ -223,8 +237,9 @@ private:
 	}
 	std::vector<std::string>* staticGeneration()
 	{
+
 		bool success=false;
-		CustomSystem::Directory dirObject;
+
 
 		std::ifstream fileObject;
 		std::string input;
@@ -243,7 +258,7 @@ private:
                 CustomSystem::ClearScreen();
 				throw std::runtime_error("Exit");
 			}
-			fileObject = std::ifstream(dirObject.getDir() + "/" + input + ".txt");
+			fileObject = std::ifstream(CustomSystem::GetDirectory() + "/" + input + ".txt");
 
 			if (fileObject.is_open())
 			{
@@ -260,18 +275,20 @@ private:
 					(*txtMap).push_back(w);
 				}
 				fileObject.close();
+				fileName = input;
 				success = true;
 			}
 			else
 			{
 				CustomSystem::ClearScreen();
-				std::cout << "Cannot find file: " << dirObject.getDir() + "/" + input + ".txt" << "\n";
+				std::cout << "Cannot find file: " << CustomSystem::GetDirectory() + "/" + input + ".txt" << "\n";
 			}
 		}
 		return txtMap;
 	}
 	std::vector<std::string>* randomGeneration()
 	{
+        genType = 1;
 		std::vector<std::string>* txtMap = new std::vector<std::string>();
 		//TODO: RNG of Graph
 		return txtMap;

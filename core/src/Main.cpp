@@ -21,13 +21,13 @@ int main()//loop check when exited
 {
 	try {
 
-		Graph graph;
+		Graph mainGraph;
 
-		int totalNodes = graph.GetTotalNodes();
+		int totalNodes = mainGraph.GetTotalNodes();
 		int random_integer= CustomSystem::rngIntGen(totalNodes-4, totalNodes);
-		Node* endgameNode = graph.GetNode(random_integer-1);
+		Node* endgameNode = mainGraph.GetNode(random_integer-1);
 
-		Player player(graph.GetNode(0));//Get first Node
+		Player player(mainGraph.GetNode(0));//Get first Node
 
 		CustomSystem::ClearScreen();
 		bool check=true;
@@ -79,16 +79,44 @@ int main()//loop check when exited
 
 			CustomSystem::ClearScreen();
 		}
-		CustomSystem::ClearScreen();
-		std::cout << "You found Node: " << endgameNode->GetName() << "!" << std::endl;
-		std::cout << "Total Steps: " << player.GetSteps() << "\n";
+
+
+
+	int points = 50 -player.GetSteps() + (/*mainPlayer->getTreasure()*/0 *5); //TREASURE POINT MULTIPLYER FOR LEADERBOARD
+    CustomSystem::ClearScreen();
+	std::cout << "YOU HAVE ESCAPED AT NODE: " << endgameNode->GetName() << "!" << std::endl;
+
+	std::cout << "TOTAL STEPS: " << player.GetSteps() << "\n";
+	std::cout << "TOTAL SCORE = " <<points<< std::endl;
+
+	std::cout << "PLEASE ENTER YOUR NAME." << std::endl;
+
+	std::string leaderBoardName;
+	std::cin >> leaderBoardName;
+
+	if (leaderBoardName !="")
+	{
+		std::ofstream fStreamObject;
+
+		fStreamObject.open(CustomSystem::GetDirectory() + "/" + mainGraph.getFileName() + "_Leaderboard.txt", std::ios::app);
+
+		fStreamObject << std::endl;
+
+		fStreamObject <<"NAME = "<< leaderBoardName;
+
+		fStreamObject << "--TREASURE_FOUND = " << (/*mainPlayer->getTreasure()*/0);
+
+		fStreamObject <<"--POINTS = "<< points;
+
+		fStreamObject.close();
+}
 	}
 	catch (const std::exception& e)
 	{
 		std::string ex = e.what();
 		if (ex == "Exit")
 		{
-			e.~exception();
+
 			return 0;
 		}
 		else

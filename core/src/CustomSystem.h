@@ -61,29 +61,23 @@ namespace CustomSystem
 	{
 		system("clear");
 	}
-	class Directory
-	{
-	private:
-		std::string path;
-		std::string exePath;
-	public:
-		Directory()
+
+		extern std::string getExeDirectory()
 		{
 			char result[PATH_MAX];
 			ssize_t count = readlink("/proc/self/exe", result, PATH_MAX);
-			this->exePath = std::string(result, (count > 0) ? count : 0);
+			return std::string(result, (count > 0) ? count : 0);
 
-			this->path = this->exePath.substr(0, this->exePath.find_last_of("\\/"));
+
 		}
-		std::string getDir()
+		extern std::string GetDirectory()
 		{
-			return this->path;
+
+
+			return getExeDirectory().substr(0, getExeDirectory().find_last_of("\\/"));
 		}
-		std::string getExeDir()
-		{
-			return this->exePath;
-		}
-	};
+
+
 };
 #endif
 
