@@ -7,7 +7,26 @@ class Player
 private:
 	int steps=0;
 	Node* CurrentNode;
+	std::vector<Node*> treasureList;
 
+	bool treasureObtained()
+	{
+		if (treasureList.size() == 0)
+		{
+			return FALSE;
+		}
+		else
+		{
+			for (unsigned int i =0; i < treasureList.size(); i++)
+			{
+				if (treasureList[i]==CurrentNode)
+				{
+					return TRUE;
+				}
+			}
+			return FALSE;
+		}		
+	}
 public:
 	Player(Node* x)
 	{
@@ -31,8 +50,17 @@ public:
 	{
 		return steps;
 	}
+	int getTreasureCount()
+	{
+		return static_cast<int>(treasureList.size());
+	}
 	void NavigateOptions()
 	{
+		if (treasureObtained()==FALSE&&(*CurrentNode).getTreasureBool()==TRUE)
+		{
+			std::cout << "YOU FOUND THE TREASURE!\n\n";
+			treasureList.emplace_back(CurrentNode);
+		}
 		std::cout<<"Total Steps: "<< GetSteps()<<"\n";
 		std::cout<<"You are at Node: "<< CurrentNode->GetName()<<std::endl;
 

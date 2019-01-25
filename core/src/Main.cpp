@@ -1,5 +1,5 @@
-#include "Graph.h"
-#include "Player.h"
+#include "Graph.cpp"
+#include "Player.cpp"
 
 
 bool CheckAndExecute(Player& player,const Bearing x)
@@ -11,32 +11,28 @@ bool CheckAndExecute(Player& player,const Bearing x)
 		{
 			player.SetCurrentNode(player.GetCurrentNode()->GetExit(x));
 			player.SetSteps();
-			return 1;
+			return TRUE;
 		}
 	}
 	return 0;
 }
 
-int main()//loop check when exited
+int main()
 {
 	try {
 
-		Graph mainGraph;
+		Graph mainGraph;	
 
-		int totalNodes = mainGraph.GetTotalNodes();
-		int random_integer= CustomSystem::rngIntGen(totalNodes-4, totalNodes);
-		Node* endgameNode = mainGraph.GetNode(random_integer-1);
-
-		Player player(mainGraph.GetNode(0));//Get first Node
+		Player player(mainGraph.GetNode(0));//Set player on first node
 
 		CustomSystem::ClearScreen();
 		bool check=true;
 		std::string input;
-
-		while (player.GetCurrentNode() != endgameNode)
+		
+		while (player.GetCurrentNode() != mainGraph.getEndGameNode())
 		{
 
-			std::cout << "Find Node: " << endgameNode->GetName() << "\n";
+			std::cout << "Find Node: " << mainGraph.getEndGameNode()->GetName() << "\n";
 			player.NavigateOptions();
 			if (check==false)
 			{
@@ -66,7 +62,7 @@ int main()//loop check when exited
 			{
 				CustomSystem::ClearScreen();
 				std::cout << "Current Node: " << player.GetCurrentNode()->GetName() <<"\n";
-				std::cout << "End Node: " << endgameNode->GetName() << "\n";
+				std::cout << "End Node: " << mainGraph.getEndGameNode()->GetName() << "\n";
 				std::cout << "Total Steps: " << player.GetSteps() <<"\n";
 
 
@@ -80,11 +76,9 @@ int main()//loop check when exited
 			CustomSystem::ClearScreen();
 		}
 
-
-
-	int points = 50 -player.GetSteps() + (/*mainPlayer->getTreasure()*/0 *5); //TREASURE POINT MULTIPLYER FOR LEADERBOARD
+	int points = 50 -player.GetSteps() + (player.getTreasureCount() *30); //TREASURE POINT MULTIPLYER FOR LEADERBOARD
     CustomSystem::ClearScreen();
-	std::cout << "YOU HAVE ESCAPED AT NODE: " << endgameNode->GetName() << "!" << std::endl;
+	std::cout << "YOU HAVE ESCAPED AT NODE: " << mainGraph.getEndGameNode()->GetName() << "!" << std::endl;
 
 	std::cout << "TOTAL STEPS: " << player.GetSteps() << "\n";
 	std::cout << "TOTAL SCORE = " <<points<< std::endl;
@@ -97,14 +91,14 @@ int main()//loop check when exited
 	if (leaderBoardName !="")
 	{
 		std::ofstream fStreamObject;
-
+		
 		fStreamObject.open(CustomSystem::GetDirectory() + "/" + mainGraph.getFileName() + "_Leaderboard.txt", std::ios::app);
 
 		fStreamObject << std::endl;
 
 		fStreamObject <<"NAME = "<< leaderBoardName;
 
-		fStreamObject << "--TREASURE_FOUND = " << (/*mainPlayer->getTreasure()*/0);
+		fStreamObject << "--TREASURE_FOUND = " << (player.getTreasureCount());
 
 		fStreamObject <<"--POINTS = "<< points;
 
@@ -125,5 +119,7 @@ int main()//loop check when exited
 			return 1;
 		}
 	}
+	
 	return 0;
+	
 }

@@ -1,4 +1,5 @@
-#pragma once
+#include "CustomSystem.h"
+
 #include <vector>
 #include <iostream>
 #include <limits.h>
@@ -7,24 +8,23 @@
 #include <stdexcept>
 #include <algorithm>
 
-
 enum class Bearing
 {
 	NORTH = 0, EAST, SOUTH, WEST
 };
 class Node
 {
-private:
+	private:
 	std::string m_name;
-	bool m_treasure = FALSE;
+	bool m_treasure=FALSE;
 	std::vector<Bearing> m_bearing;//0=north,1=east,2=south,3=west
 	std::vector<Node*> m_nodes;	//list of pointers to nodes
-
+	
 	void AssingNodes(Bearing p, const std::string x, std::vector<Node*> &m_map)
 	{
-		for (unsigned int i = 0; i < m_map.size(); i++)
+		for(unsigned int i =0; i<m_map.size();i++)
 		{
-			if ((*m_map[i]).GetName() == x)
+			if((*m_map[i]).GetName()==x)
 			{
 				m_bearing.push_back(p);
 				m_nodes.push_back(m_map[i]);
@@ -33,18 +33,18 @@ private:
 		}
 	}
 
-public:
+	public:
 
 	Node(std::string name)
 	{
-		this->m_name = name;
+		this->m_name = name;		
 	}
 	~Node()
 	{
 		std::cout << "Node Destructor Called: " << m_name << "\n";
-		for (unsigned int x = 0; x < m_nodes.size(); x++)
+		for(unsigned int x=0;x<m_nodes.size();x++)
 		{
-			m_nodes[x] = nullptr;
+			m_nodes[x]=nullptr;
 		}
 
 	}
@@ -57,9 +57,9 @@ public:
 	}
 	Node* GetExit(Bearing x)
 	{
-		for (unsigned int i = 0; i < m_bearing.size(); i++)
+		for(unsigned int i =0; i<m_bearing.size();i++)
 		{
-			if (m_bearing[i] == x)
+			if(m_bearing[i] ==x)
 			{
 				return m_nodes[i];
 			}
@@ -74,21 +74,21 @@ public:
 	void SetBearings(std::string North_node, std::string East_node, std::string South_node, const std::string West_node, std::vector<Node*> &m_map)
 	{
 
-		if (North_node != "*" || North_node != "")
+		if(North_node!="*"|| North_node != "")
 		{
-			AssingNodes(Bearing::NORTH, North_node, m_map);
+			AssingNodes(Bearing::NORTH,North_node,m_map);
 		}
-		if (East_node != "*" || East_node != "")
+		if(East_node!="*" || East_node != "")
 		{
-			AssingNodes(Bearing::EAST, East_node, m_map);
+			AssingNodes(Bearing::EAST,East_node,m_map);
 		}
-		if (South_node != "*" || South_node != "")
+		if(South_node!="*" || South_node != "")
 		{
-			AssingNodes(Bearing::SOUTH, South_node, m_map);
+			AssingNodes(Bearing::SOUTH,South_node,m_map);
 		}
-		if (West_node != "*" || West_node != "")
+		if(West_node!="*" || West_node != "")
 		{
-			AssingNodes(Bearing::WEST, West_node, m_map);
+			AssingNodes(Bearing::WEST,West_node,m_map);
 		}
 	}
 	void setTreasure()
@@ -106,7 +106,7 @@ class Graph
 public:
 	Graph()
 	{
-		if (GraphGeneration() != 0)
+		if (GraphGeneration()!=0)
 		{
 			throw std::runtime_error("Exit");
 		}
@@ -126,7 +126,7 @@ public:
 
 	int GetTotalNodes()
 	{
-		return static_cast<int>(m_map.size());
+		return static_cast<int>(m_map.size()) ;
 	}
 	Node* GetNode(int x)
 	{
@@ -134,9 +134,9 @@ public:
 	}
 	Node* GetNode(std::string x)
 	{
-		for (unsigned int i = 0; i < m_map.size(); i++)
+		for(unsigned int i=0;i<m_map.size();i++)
 		{
-			if ((*m_map[i]).GetName() == x)
+			if((*m_map[i]).GetName()==x)
 			{
 				return m_map[i];
 			}
@@ -145,16 +145,16 @@ public:
 	}
 	int getGenType()
 	{
-		return genType;
+        return genType;
 	}
 	std::string getFileName()
 	{
-		if (getGenType() == 1)
-		{
-			return "RNG";
-		}
-		else
-			return fileName;
+        if(getGenType()==1)
+        {
+            return "RNG";
+        }
+        else
+        return fileName;
 	}
 	Node* getEndGameNode()
 	{
@@ -172,25 +172,25 @@ private:
 	bool g_treasure = FALSE;
 	std::vector<Node*> m_map;
 	Node* endgameNode;
-
-	int genType;
-	std::string fileName;
+	
+    int genType;
+    std::string fileName;
 
 	int GraphGeneration()
 	{
 		CustomSystem::ClearScreen();
 
 		std::vector<std::string>* txtMap = Parsing();
-		if (txtMap != nullptr)
+		if (txtMap!=nullptr)
 		{
-			int rng = 0;
+			int rng=0;
 			for (unsigned int i = 0; i < (*txtMap).size(); i = i + 5)
 			{
 				m_map.push_back(new Node((*txtMap)[i]));
 				int rng = CustomSystem::rngIntGen(0, 10);
-				if (i >= 6 * 5 && rng >= 7 && getTreasureBool() == FALSE)
+				if (i>=6*5&&rng >= 7 && getTreasureBool() == FALSE)
 				{
-					(*m_map[i / 5]).setTreasure();
+					(*m_map[i/5]).setTreasure();
 					setGraphTreasure();
 				}
 			}
@@ -214,52 +214,52 @@ private:
 	{
 
 		std::string input;
-		bool correctInput = false;
-		while (!correctInput)
+		bool correctInput=false;
+		while(!correctInput)
 		{
-			printf("Please select generation type.\n[R] for RNG.\n[S] for STATIC.\n[Q] to Exit.\n");
-			std::cin >> input;
-			if (input.size() != 1)
-			{
-				input = "z";
-			}
-			if (input == "s" || input == "S")
-			{
-				genType = 0;
-				correctInput = 1;
-			}
-			else if (input == "r" || input == "R")
-			{
-				genType = 1;
-				correctInput = 1;
-			}
-			else if (input == "q" || input == "Q")
-			{
-				throw std::runtime_error("Exit");
-			}
-			else
-			{
-				CustomSystem::ClearScreen();
-				printf("Incorrect Input.\n");
-			}
-
+		printf("Please select generation type.\n[R] for RNG.\n[S] for STATIC.\n[Q] to Exit.\n");
+		std::cin>>input;
+		if(input.size()!=1)
+		{
+			input="z";
+		}
+		if(input=="s"||input=="S")
+		{
+			genType=0;
+			correctInput=1;
+		}
+		else if(input=="r"||input=="R")
+		{
+			genType=1;
+			correctInput=1;
+		}
+		else if(input=="q"||input=="Q")
+		{
+			throw std::runtime_error("Exit");
+		}
+		else
+		{
 			CustomSystem::ClearScreen();
-			if (genType == 1 && correctInput == 1)
-			{
-				return randomGeneration();
-			}
-			else if (genType == 0 && correctInput == 1)
-			{
+			printf("Incorrect Input.\n");
+		}
 
-				return staticGeneration();
-			}
+		CustomSystem::ClearScreen();
+		if(genType==1&& correctInput==1)
+		{
+			return randomGeneration();
+		}
+		else if(genType == 0 && correctInput == 1)
+		{
+
+			return staticGeneration();
+		}
 		}
 		return nullptr;
 	}
 	std::vector<std::string>* staticGeneration()
 	{
 
-		bool success = false;
+		bool success=false;
 
 
 		std::ifstream fileObject;
@@ -274,9 +274,9 @@ private:
 
 			std::cin >> input;
 
-			if (input == "exit")
+			if (input=="exit")
 			{
-				CustomSystem::ClearScreen();
+                CustomSystem::ClearScreen();
 				throw std::runtime_error("Exit");
 			}
 			fileObject = std::ifstream(CustomSystem::GetDirectory() + "/" + input + ".txt");
@@ -309,8 +309,8 @@ private:
 	}
 	std::vector<std::string>* randomGeneration()
 	{
-		genType = 1;
-		int nodeNumber = CustomSystem::rngIntGen(13, 17);
+        genType = 1;
+		int nodeNumber = CustomSystem::rngIntGen(13,17);
 		std::vector<std::string>* txtMap = new std::vector<std::string>(nodeNumber * 5);
 		(*txtMap)[0] = "A";
 		(*txtMap)[5] = "B";
@@ -324,7 +324,7 @@ private:
 		(*txtMap)[45] = "J";
 		(*txtMap)[50] = "K";
 		(*txtMap)[55] = "L";
-		(*txtMap)[60] = "N";
+		(*txtMap)[60] = "N";			
 
 		switch (nodeNumber)
 		{
@@ -343,7 +343,7 @@ private:
 		{
 			(*txtMap)[65] = "M";
 			(*txtMap)[70] = "O";
-			(*txtMap)[75] = "P";
+			(*txtMap)[75] = "P";			
 			break;
 		}
 		case 17:
@@ -356,30 +356,30 @@ private:
 		}
 		}
 		int rng;
-		int currentNode = 0;
-		for (unsigned int i = 5; i < (*txtMap).size(); i += 5)
+		int currentNode=0;
+		for (unsigned int i = 5; i<(*txtMap).size();i+=5)
 		{
-			rng = CustomSystem::rngIntGen(1, 10);
-			if (rng >= 5)
-			{
-				bool check = FALSE;
+			rng = CustomSystem::rngIntGen(1,10);
+			if (rng>=5)
+			{				
+				bool check=FALSE;
 				for (unsigned int j = 1; j <= 4; j++)
 				{
 					rng = CustomSystem::rngIntGen(0, 10);
 					if (rng >= 7)
-					{
+					{						
 						switch (j)
 						{
 						case 1:
-							if ((*txtMap)[i + j] == "" && (*txtMap)[currentNode + 3] == "")
+							if ((*txtMap)[i + j]==""&&(*txtMap)[currentNode + 3]=="")
 							{
 								(*txtMap)[i + j] = (*txtMap)[currentNode];
 								(*txtMap)[currentNode + 3] = (*txtMap)[i];
 								check = TRUE;
-							}
+							}							
 							break;
 						case 2:
-							if ((*txtMap)[i + j] == "" && (*txtMap)[currentNode + 4] == "")
+							if ((*txtMap)[i + j] == ""&&(*txtMap)[currentNode + 4] == "")
 							{
 								(*txtMap)[i + j] = (*txtMap)[currentNode];
 								(*txtMap)[currentNode + 4] = (*txtMap)[i];
@@ -410,32 +410,32 @@ private:
 						break;
 					}
 
-					if (j == 4 && check == FALSE)
+					if (j == 4&& check==FALSE)
 					{
 						j = 1;
-					}
-				}
+					}					
+				}				
 				currentNode = i;
 			}
 		}
 		for (unsigned int i = 5; i < (*txtMap).size(); i += 5)
 		{
-			while ((*txtMap)[i + 1] == "" && (*txtMap)[i + 2] == "" && (*txtMap)[i + 3] == "" && (*txtMap)[i + 4] == "")
+			while ((*txtMap)[i+1]==""&& (*txtMap)[i + 2] == ""&& (*txtMap)[i + 3] == ""&& (*txtMap)[i + 4] == "")
 			{
 				int x = CustomSystem::rngIntGen(1, 4);
 				//check
 				switch (x)
 				{
 				case 1:
-
+					
 					if ((*txtMap)[i - 5 + 3] == "")
 					{
 						(*txtMap)[i + x] = (*txtMap)[i - 5];
 						(*txtMap)[i - 5 + 3] = (*txtMap)[i];
-
+						
 					}
-					break;
-
+					break;																
+					
 				case 2:
 					if ((*txtMap)[i - 5 + 4] == "")
 					{
@@ -457,7 +457,7 @@ private:
 						(*txtMap)[i - 5 + 2] = (*txtMap)[i];
 					}
 					break;
-
+					
 				}
 			}
 		}

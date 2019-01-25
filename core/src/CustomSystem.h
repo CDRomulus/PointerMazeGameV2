@@ -7,13 +7,13 @@
 namespace CustomSystem
 {
 	extern int rngIntGen(int l_thresh, int h_thresh)
-{
+	{
 	std::random_device rd;     // only used once to initialise (seed) engine
 	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
 	std::uniform_int_distribution<int> uni(l_thresh, h_thresh); // guaranteed unbiased
 	auto random_integer = uni(rng);
 	return random_integer;
-}
+	}
 
 };
 #if defined(_WIN32)
@@ -23,32 +23,23 @@ namespace CustomSystem
 {
 	extern void ClearScreen()
 	{
-		std::cout<<"\nPress enter to continue.";
-		std::cin.get();
+		system("cls");
 	}
-	class Directory
+	
+	extern std::string getExeDirectory()
 	{
-	private:
-		std::string path;
-		std::string exePath;
-	public:
-		Directory()
-		{
-			char buffer[MAX_PATH];
-			GetModuleFileName(NULL, buffer, MAX_PATH);
-			this->exePath = std::string(buffer);
+		char buffer[MAX_PATH];
+		GetModuleFileName(NULL, buffer, MAX_PATH);
+		return std::string(buffer);
 
-			this->path = this->exePath.substr(0, this->exePath.find_last_of("\\/"));
-		}
-		std::string getDir()
-		{
-			return this->path;
-		}
-		std::string getExeDir()
-		{
-			return this->exePath;
-		}
-	};
+			
+	}
+	extern std::string GetDirectory()
+	{
+		return getExeDirectory().substr(0, getExeDirectory().find_last_of("\\/"));
+	}
+		
+	
 };
 
 #elif defined(__linux__)
