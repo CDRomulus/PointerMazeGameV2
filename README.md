@@ -1,9 +1,10 @@
 # PointerMazeGameV2
-A console maze game using dynamically created objects.
 
-Implemented with linked list references on each Node. 
+A console maze game using dynamically created objects. A revisit to my first Univiersity C++ assignment.
 
-Uses smart pointers and regular pointers.
+Each node (Room) of the maze contains a linked list references to connected nodes.
 
-gcc compiler ready.
+Uses raw pointers.  
+
+Visual C++ and GNU/C++ compiler compatible. 
 
