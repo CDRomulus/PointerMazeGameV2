@@ -24,10 +24,7 @@ Node::~Node()
 	{
 		m_nodes[x] = nullptr;
 	}
-
 }
-
-
 
 const std::vector<Bearing>& Node::GetAvailableBearings()
 {

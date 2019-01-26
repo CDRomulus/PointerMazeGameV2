@@ -1,4 +1,4 @@
-#include "Map.h"	
+#include "Map.h"
 
 
 	Graph::Graph()
@@ -18,7 +18,7 @@
 			delete nodes;
 			nodes = nullptr;
 		}
-	}	
+	}
 
 	int Graph::GetTotalNodes()
 	{
@@ -77,7 +77,7 @@
 			for (unsigned int i = 0; i < (*txtMap).size(); i = i + 5)
 			{
 				m_map.push_back(new Node((*txtMap)[i]));
-				int rng = CustomSystem::rngIntGen(0, 10);
+				rng = CustomSystem::rngIntGen(0, 10);
 				if (i>=6*5&&rng >= 7 && getTreasureBool() == FALSE)
 				{
 					(*m_map[i/5]).setTreasure();
@@ -214,7 +214,7 @@
 		(*txtMap)[45] = "J";
 		(*txtMap)[50] = "K";
 		(*txtMap)[55] = "L";
-		(*txtMap)[60] = "N";			
+		(*txtMap)[60] = "N";
 
 		switch (nodeNumber)
 		{
@@ -233,7 +233,7 @@
 		{
 			(*txtMap)[65] = "M";
 			(*txtMap)[70] = "O";
-			(*txtMap)[75] = "P";			
+			(*txtMap)[75] = "P";
 			break;
 		}
 		case 17:
@@ -251,13 +251,13 @@
 		{
 			rng = CustomSystem::rngIntGen(1,10);
 			if (rng>=5)
-			{				
+			{
 				bool check=FALSE;
 				for (unsigned int j = 1; j <= 4; j++)
 				{
 					rng = CustomSystem::rngIntGen(0, 10);
 					if (rng >= 7)
-					{						
+					{
 						switch (j)
 						{
 						case 1:
@@ -266,7 +266,7 @@
 								(*txtMap)[i + j] = (*txtMap)[currentNode];
 								(*txtMap)[currentNode + 3] = (*txtMap)[i];
 								check = TRUE;
-							}							
+							}
 							break;
 						case 2:
 							if ((*txtMap)[i + j] == ""&&(*txtMap)[currentNode + 4] == "")
@@ -303,8 +303,8 @@
 					if (j == 4&& check==FALSE)
 					{
 						j = 1;
-					}					
-				}				
+					}
+				}
 				currentNode = i;
 			}
 		}
@@ -317,15 +317,15 @@
 				switch (x)
 				{
 				case 1:
-					
+
 					if ((*txtMap)[i - 5 + 3] == "")
 					{
 						(*txtMap)[i + x] = (*txtMap)[i - 5];
 						(*txtMap)[i - 5 + 3] = (*txtMap)[i];
-						
+
 					}
-					break;																
-					
+					break;
+
 				case 2:
 					if ((*txtMap)[i - 5 + 4] == "")
 					{
@@ -347,7 +347,7 @@
 						(*txtMap)[i - 5 + 2] = (*txtMap)[i];
 					}
 					break;
-					
+
 				}
 			}
 		}

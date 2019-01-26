@@ -15,7 +15,7 @@
 
 namespace CustomSystem
 {
-	extern int rngIntGen(int l_thresh, int h_thresh)
+	inline int rngIntGen(int l_thresh, int h_thresh)
 	{
 	std::random_device rd;     // only used once to initialise (seed) engine
 	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
@@ -30,25 +30,23 @@ namespace CustomSystem
 
 namespace CustomSystem
 {
-	extern void ClearScreen()
+	inline  void ClearScreen()
 	{
 		system("cls");
 	}
-	
-	extern std::string getExeDirectory()
+
+	inline  std::string getExeDirectory()
 	{
 		char buffer[MAX_PATH];
 		GetModuleFileName(NULL, buffer, MAX_PATH);
 		return std::string(buffer);
 
-			
+
 	}
-	extern std::string GetDirectory()
+	inline  std::string GetDirectory()
 	{
 		return getExeDirectory().substr(0, getExeDirectory().find_last_of("\\/"));
 	}
-		
-	
 };
 
 #elif defined(__linux__)
@@ -57,12 +55,12 @@ namespace CustomSystem
 
 namespace CustomSystem
 {
-	extern void ClearScreen()
+	inline  void ClearScreen()
 	{
 		system("clear");
 	}
 
-		extern std::string getExeDirectory()
+		inline  std::string getExeDirectory()
 		{
 			char result[PATH_MAX];
 			ssize_t count = readlink("/proc/self/exe", result, PATH_MAX);
@@ -70,14 +68,12 @@ namespace CustomSystem
 
 
 		}
-		extern std::string GetDirectory()
+		inline  std::string GetDirectory()
 		{
 
 
 			return getExeDirectory().substr(0, getExeDirectory().find_last_of("\\/"));
 		}
-
-
 };
 #endif
 
