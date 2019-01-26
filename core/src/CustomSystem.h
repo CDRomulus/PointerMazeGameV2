@@ -4,6 +4,15 @@
 #include <chrono>
 #include <iostream>
 #include <random>
+
+#ifndef FALSE
+#define FALSE               0
+#endif
+
+#ifndef TRUE
+#define TRUE                1
+#endif
+
 namespace CustomSystem
 {
 	extern int rngIntGen(int l_thresh, int h_thresh)

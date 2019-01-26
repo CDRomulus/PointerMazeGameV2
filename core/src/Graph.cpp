@@ -1,110 +1,7 @@
-#include "CustomSystem.h"
+#include "Map.h"	
 
-#include <vector>
-#include <iostream>
-#include <limits.h>
-#include <fstream>
-#include <string>
-#include <stdexcept>
-#include <algorithm>
 
-enum class Bearing
-{
-	NORTH = 0, EAST, SOUTH, WEST
-};
-class Node
-{
-	private:
-	std::string m_name;
-	bool m_treasure=FALSE;
-	std::vector<Bearing> m_bearing;//0=north,1=east,2=south,3=west
-	std::vector<Node*> m_nodes;	//list of pointers to nodes
-	
-	void AssingNodes(Bearing p, const std::string x, std::vector<Node*> &m_map)
-	{
-		for(unsigned int i =0; i<m_map.size();i++)
-		{
-			if((*m_map[i]).GetName()==x)
-			{
-				m_bearing.push_back(p);
-				m_nodes.push_back(m_map[i]);
-				break;
-			}
-		}
-	}
-
-	public:
-
-	Node(std::string name)
-	{
-		this->m_name = name;		
-	}
-	~Node()
-	{
-		std::cout << "Node Destructor Called: " << m_name << "\n";
-		for(unsigned int x=0;x<m_nodes.size();x++)
-		{
-			m_nodes[x]=nullptr;
-		}
-
-	}
-
-	Node(const Node&) = delete;
-
-	const std::vector<Bearing>& GetAvailableBearings()
-	{
-		return m_bearing;
-	}
-	Node* GetExit(Bearing x)
-	{
-		for(unsigned int i =0; i<m_bearing.size();i++)
-		{
-			if(m_bearing[i] ==x)
-			{
-				return m_nodes[i];
-			}
-		}
-		return nullptr;
-	}
-
-	std::string GetName()
-	{
-		return m_name;
-	}
-	void SetBearings(std::string North_node, std::string East_node, std::string South_node, const std::string West_node, std::vector<Node*> &m_map)
-	{
-
-		if(North_node!="*"|| North_node != "")
-		{
-			AssingNodes(Bearing::NORTH,North_node,m_map);
-		}
-		if(East_node!="*" || East_node != "")
-		{
-			AssingNodes(Bearing::EAST,East_node,m_map);
-		}
-		if(South_node!="*" || South_node != "")
-		{
-			AssingNodes(Bearing::SOUTH,South_node,m_map);
-		}
-		if(West_node!="*" || West_node != "")
-		{
-			AssingNodes(Bearing::WEST,West_node,m_map);
-		}
-	}
-	void setTreasure()
-	{
-		m_treasure = TRUE;
-	}
-	bool getTreasureBool()
-	{
-		return m_treasure;
-	}
-};
-
-class Graph
-{
-public:
-	Graph()
+	Graph::Graph()
 	{
 		if (GraphGeneration()!=0)
 		{
@@ -113,7 +10,7 @@ public:
 		endgameNode = GetNode((CustomSystem::rngIntGen(GetTotalNodes() - 4, GetTotalNodes())) - 1);
 	}
 
-	~Graph()
+	Graph::~Graph()
 	{
 		printf("Graph Destructor Called.\n");
 		for (auto nodes : m_map)
@@ -121,18 +18,17 @@ public:
 			delete nodes;
 			nodes = nullptr;
 		}
-	}
-	Graph(const Graph&) = delete;
+	}	
 
-	int GetTotalNodes()
+	int Graph::GetTotalNodes()
 	{
 		return static_cast<int>(m_map.size()) ;
 	}
-	Node* GetNode(int x)
+	Node* Graph::GetNode(int x)
 	{
 		return m_map[x];
 	}
-	Node* GetNode(std::string x)
+	Node* Graph::GetNode(std::string x)
 	{
 		for(unsigned int i=0;i<m_map.size();i++)
 		{
@@ -143,11 +39,11 @@ public:
 		}
 		return nullptr;
 	}
-	int getGenType()
+	int Graph::getGenType()
 	{
         return genType;
 	}
-	std::string getFileName()
+	std::string Graph::getFileName()
 	{
         if(getGenType()==1)
         {
@@ -156,27 +52,21 @@ public:
         else
         return fileName;
 	}
-	Node* getEndGameNode()
+	Node* Graph::getEndGameNode()
 	{
 		return endgameNode;
 	}
-	void setGraphTreasure()
+	void Graph::setGraphTreasure()
 	{
 		g_treasure = TRUE;
 	}
-	bool getTreasureBool()
+	bool Graph::getTreasureBool()
 	{
 		return g_treasure;
 	}
-private:
-	bool g_treasure = FALSE;
-	std::vector<Node*> m_map;
-	Node* endgameNode;
-	
-    int genType;
-    std::string fileName;
 
-	int GraphGeneration()
+
+	int Graph::GraphGeneration()
 	{
 		CustomSystem::ClearScreen();
 
@@ -210,7 +100,7 @@ private:
 		}
 	}
 
-	std::vector<std::string>* Parsing()
+	std::vector<std::string>* Graph::Parsing()
 	{
 
 		std::string input;
@@ -256,7 +146,7 @@ private:
 		}
 		return nullptr;
 	}
-	std::vector<std::string>* staticGeneration()
+	std::vector<std::string>* Graph::staticGeneration()
 	{
 
 		bool success=false;
@@ -307,7 +197,7 @@ private:
 		}
 		return txtMap;
 	}
-	std::vector<std::string>* randomGeneration()
+	std::vector<std::string>* Graph::randomGeneration()
 	{
         genType = 1;
 		int nodeNumber = CustomSystem::rngIntGen(13,17);
@@ -463,4 +353,4 @@ private:
 		}
 		return txtMap;
 	}
-};
+

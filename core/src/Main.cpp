@@ -1,7 +1,4 @@
-#include "Graph.cpp"
-#include "Player.cpp"
-
-
+#include "Map.h"
 bool CheckAndExecute(Player& player,const Bearing x)
 {
 

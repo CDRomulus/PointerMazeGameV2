@@ -1,15 +1,6 @@
-#pragma once
+#include "Map.h"
 
-#include <iostream>
-
-class Player
-{
-private:
-	int steps=0;
-	Node* CurrentNode;
-	std::vector<Node*> treasureList;
-
-	bool treasureObtained()
+	bool Player::treasureObtained()
 	{
 		if (treasureList.size() == 0)
 		{
@@ -27,34 +18,34 @@ private:
 			return FALSE;
 		}		
 	}
-public:
-	Player(Node* x)
+
+	Player::Player(Node* x)
 	{
 		CurrentNode =x;
 	}
 
-	Node* GetCurrentNode()
+	Node* Player::GetCurrentNode()
 	{
 		return CurrentNode;
 	}
 
-	void SetCurrentNode(Node* x)
+	void Player::SetCurrentNode(Node* x)
 	{
 		CurrentNode =x;
 	}
-	void SetSteps()
+	void Player::SetSteps()
 	{
 		steps++;
 	}
-	int GetSteps()
+	int Player::GetSteps()
 	{
 		return steps;
 	}
-	int getTreasureCount()
+	int Player::getTreasureCount()
 	{
 		return static_cast<int>(treasureList.size());
 	}
-	void NavigateOptions()
+	void Player::NavigateOptions()
 	{
 		if (treasureObtained()==FALSE&&(*CurrentNode).getTreasureBool()==TRUE)
 		{
@@ -88,4 +79,4 @@ public:
 		}
 		std::cout<<"\n[Q]uit.\n";
 	}
-};
+
