@@ -6,7 +6,7 @@ Each room (Node) of the maze contains an array of references to connected nodes.
 
 Uses raw pointers.  
 
-Visual C++ and GNU/C++ compiler compatible. 
+g++ compiler compatible. 
 
 
 
