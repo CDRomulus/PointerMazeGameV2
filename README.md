@@ -8,5 +8,6 @@ Uses raw pointers.
 
 Visual C++ and GNU/C++ compiler compatible. 
 
-Windows and Linux compatible.
+
+
 
