@@ -1,4 +1,4 @@
-# PointerMazeGameV2
+# PointerMazeGame
 
 A console maze game using dynamically created objects. A revisit to my first Univiersity C++ assignment.
 
